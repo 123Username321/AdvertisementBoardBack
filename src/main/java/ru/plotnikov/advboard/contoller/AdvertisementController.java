@@ -11,6 +11,6 @@ public class AdvertisementController {
     @RequestMapping("/advertisement/{id}")
     @ResponseBody
     String index(@PathVariable int id) {
-        return String.valueOf(id);
+        return "<!DOCTYPE html><html><head></head><body><h1>" + id + "</h1></body></html>";
     }
 }
