@@ -7,16 +7,16 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import ru.plotnikov.advboard.model.Advertisement;
-import ru.plotnikov.advboard.service.CommonService;
-import ru.plotnikov.advboard.service.implementation.AdvertisementService;
+import ru.plotnikov.advboard.model.AdvertisementRequest;
+import ru.plotnikov.advboard.service.AdvertisementService;
 
 @RestController
 @RequestMapping("/advertisement")
 public class AdvertisementController {
-    private final CommonService<Advertisement> advService;
+    private final AdvertisementService advService;
 
     @Autowired
-    public AdvertisementController(@Qualifier("advertisementService") CommonService<Advertisement> advService) {
+    public AdvertisementController(AdvertisementService advService) {
         this.advService = advService;
     }
 
@@ -26,7 +26,22 @@ public class AdvertisementController {
     }
 
     @GetMapping("/{id}")
-    Advertisement getById(@PathVariable int id) {
+    public Advertisement getById(@PathVariable int id) {
         return advService.getById(id);
+    }
+
+    @PostMapping("/add")
+    public int create(@RequestBody AdvertisementRequest advertisementRequest) {
+        return advService.insert(advertisementRequest);
+    }
+
+    @PutMapping("/{id}")
+    void modifyById(@PathVariable int id, @RequestBody AdvertisementRequest advertisementRequest) {
+        advService.update(id, advertisementRequest);
+    }
+
+    @DeleteMapping("/{id}")
+    void deleteById(@PathVariable int id) {
+        advService.delete(id);
     }
 }

@@ -46,4 +46,8 @@ public class Advertisement {
     public void setAddTime(Timestamp addTime) {
         this.addTime = addTime;
     }
+
+    public String toString() {
+        return "{ id: " + this.id + ", title: " + this.title + ", description: " + this.description + ", addTime: " + this.addTime.toString() + "}";
+    }
 }
