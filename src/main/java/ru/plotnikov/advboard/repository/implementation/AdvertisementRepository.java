@@ -1,9 +1,11 @@
-package ru.plotnikov.advboard.model;
+package ru.plotnikov.advboard.repository.implementation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import ru.plotnikov.advboard.model.Advertisement;
+import ru.plotnikov.advboard.repository.CommonRepository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

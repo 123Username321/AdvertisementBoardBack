@@ -1,4 +1,4 @@
-package ru.plotnikov.advboard.model;
+package ru.plotnikov.advboard.repository;
 
 import java.util.List;
 
