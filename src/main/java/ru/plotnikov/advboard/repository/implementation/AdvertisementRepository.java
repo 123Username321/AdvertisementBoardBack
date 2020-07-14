@@ -57,7 +57,7 @@ public class AdvertisementRepository implements CommonRepository<Advertisement> 
             PreparedStatement ps = connection.prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, advertisement.getTitle());
             ps.setString(2, advertisement.getDescription());
-            ps.setString(3, advertisement.getAddTime().toString());
+            ps.setString(3, (new Timestamp((new java.util.Date()).getTime())).toString());
             return ps;
         }, keyHolder);
 
@@ -66,8 +66,8 @@ public class AdvertisementRepository implements CommonRepository<Advertisement> 
 
     @Override
     public void update(Advertisement advertisement) {
-        jdbcTemplate.update("UPDATE advertisement SET title = ?, description = ?, add_date = ? WHERE id = ?",
-                advertisement.getTitle(), advertisement.getDescription(), advertisement.getAddTime(), advertisement.getId());
+        jdbcTemplate.update("UPDATE advertisement SET title = ?, description = ? WHERE id = ?",
+                advertisement.getTitle(), advertisement.getDescription(), advertisement.getId());
     }
 
     @Override

@@ -34,13 +34,13 @@ public class AdvertisementController {
     @PostMapping("/add")
     public int create(@RequestBody AdvertisementRequest advertisement) {
         return advService.insertEntity(new Advertisement(0, advertisement.getTitle(),
-                advertisement.getDescription(), advertisement.getAddTime()));
+                advertisement.getDescription(), null));
     }
 
     @PutMapping("/{id}")
     void modifyById(@PathVariable int id, @RequestBody AdvertisementRequest advertisement) {
         advService.updateEntity(new Advertisement(id, advertisement.getTitle(),
-                advertisement.getDescription(), advertisement.getAddTime()));
+                advertisement.getDescription(), null));
     }
 
     @DeleteMapping("/{id}")
