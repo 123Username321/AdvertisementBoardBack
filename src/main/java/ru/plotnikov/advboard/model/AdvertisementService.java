@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class AdvertisementService implements IService<Advertisement> {
+public class AdvertisementService implements CommonService<Advertisement> {
     private final AdvertisementRepository advRepo;
 
     @Autowired

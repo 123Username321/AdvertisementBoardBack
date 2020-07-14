@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 @Repository
-public class AdvertisementRepository implements IRepository<Advertisement> {
+public class AdvertisementRepository implements CommonRepository<Advertisement> {
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
