@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
@@ -16,10 +17,24 @@ public class AdvertisementRepository {
     @Autowired
     JdbcTemplate jdbcTemplate;
 
-    AdvertisementRepository(DataSource dataSource) {
+    public AdvertisementRepository(DataSource dataSource) {
         jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
+    public List<Advertisement> findAll() {
+        List<Advertisement> results = jdbcTemplate.query(
+                "SELECT * FROM advertisement", new Object[] {},
+                new RowMapper<Advertisement>() {
+                    @Override
+                    public Advertisement mapRow(ResultSet rs, int rowNum) throws SQLException {
+                        return new Advertisement(rs.getInt("id"), rs.getString("title"),
+                                rs.getString("description"), rs.getTimestamp("add_date"));
+                    }
+                });
+        return results;
+    }
+
+    /*
     public void save(Advertisement advertisement) {
         String sql = "INSERT INTO advertisement VALUES (DEFAULT, ?, ?, ?)";
         jdbcTemplate.update(sql, advertisement.getTitle(), advertisement.getDescription(), advertisement.getAddTime());

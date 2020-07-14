@@ -13,12 +13,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import ru.plotnikov.advboard.model.Advertisement;
+import ru.plotnikov.advboard.model.AdvertisementRepository;
 
 @Controller
 public class AdvertisementController {
-    //AdvertisementRepository advRepo;
+    AdvertisementRepository advRepo;
 
-    @RequestMapping("/advertisement/")
+    @RequestMapping("/advertisement/list")
     @ResponseBody
     String getAll() {
         //advRepo = new AdvertisementRepository();
@@ -31,17 +32,10 @@ public class AdvertisementController {
         dataSource.setUrl("jdbc:h2:mem:testdb");
         dataSource.setPassword("");
 
-        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+        //JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+        advRepo = new AdvertisementRepository(dataSource);
 
-        List<Advertisement> results = jdbcTemplate.query(
-                "SELECT * FROM advertisement", new Object[] {},
-                new RowMapper<Advertisement>() {
-                    @Override
-                    public Advertisement mapRow(ResultSet rs, int rowNum) throws SQLException {
-                        return new Advertisement(rs.getInt("id"), rs.getString("title"),
-                                rs.getString("description"), rs.getTimestamp("add_date"));
-                    }
-                });
+        List<Advertisement> results = advRepo.findAll();
 
         String html = "<!DOCTYPE html><html><head></head><body><table>";
 
