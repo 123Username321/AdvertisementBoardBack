@@ -1,16 +1,31 @@
 package ru.plotnikov.advboard.contoller;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import java.util.List;
 
-@Controller
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+
+import ru.plotnikov.advboard.model.Advertisement;
+import ru.plotnikov.advboard.model.AdvertisementService;
+
+@RestController
+@RequestMapping("/advertisement")
 public class AdvertisementController {
-    @RequestMapping("/advertisement/{id}")
-    @ResponseBody
-    String index(@PathVariable int id) {
-        return String.valueOf(id);
+    private final AdvertisementService advService;
+
+    @Autowired
+    public AdvertisementController(AdvertisementService advService) {
+        this.advService = advService;
+    }
+
+    @GetMapping("/list")
+    public List<Advertisement> getAll() {
+        return advService.getAll();
+    }
+
+    @GetMapping("/{id}")
+    Advertisement getById(@PathVariable int id) {
+        return advService.getById(id);
     }
 }
