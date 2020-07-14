@@ -31,13 +31,13 @@ public class AdvertisementController {
     }
 
     @PostMapping("/add")
-    public int create(@RequestBody AdvertisementRequest advertisement) {
-        return advService.insert(new AdvertisementRequest(advertisement.getTitle(), advertisement.getDescription()));
+    public int create(@RequestBody AdvertisementRequest advertisementRequest) {
+        return advService.insert(advertisementRequest);
     }
 
     @PutMapping("/{id}")
-    void modifyById(@PathVariable int id, @RequestBody AdvertisementRequest advertisement) {
-        advService.update(id, new AdvertisementRequest(advertisement.getTitle(), advertisement.getDescription()));
+    void modifyById(@PathVariable int id, @RequestBody AdvertisementRequest advertisementRequest) {
+        advService.update(id, advertisementRequest);
     }
 
     @DeleteMapping("/{id}")
