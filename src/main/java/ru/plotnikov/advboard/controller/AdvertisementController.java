@@ -31,16 +31,16 @@ public class AdvertisementController {
         return advService.getById(id);
     }
 
-    @PostMapping("/list")
-    public int Create(@RequestBody AdvertisementRequest advertisement) {
+    @PostMapping("/add")
+    public int create(@RequestBody AdvertisementRequest advertisement) {
         return advService.insertEntity(new Advertisement(0, advertisement.getTitle(),
-                advertisement.getDescription(), Timestamp.valueOf(advertisement.getAddTime())));
+                advertisement.getDescription(), advertisement.getAddTime()));
     }
 
     @PutMapping("/{id}")
-    void ModifyById(@PathVariable int id, @RequestBody AdvertisementRequest advertisement) {
-        advService.updateEntity(id, new Advertisement(0, advertisement.getTitle(),
-                advertisement.getDescription(), Timestamp.valueOf(advertisement.getAddTime())));
+    void modifyById(@PathVariable int id, @RequestBody AdvertisementRequest advertisement) {
+        advService.updateEntity(new Advertisement(id, advertisement.getTitle(),
+                advertisement.getDescription(), advertisement.getAddTime()));
     }
 
     @DeleteMapping("/{id}")

@@ -1,9 +1,11 @@
 package ru.plotnikov.advboard.model;
 
+import java.sql.Timestamp;
+
 public class AdvertisementRequest {
     private String title;
     private String description;
-    private String addTime;
+    private Timestamp addTime;
 
     public String getTitle() {
         return title;
@@ -21,11 +23,11 @@ public class AdvertisementRequest {
         this.description = description;
     }
 
-    public String getAddTime() {
+    public Timestamp getAddTime() {
         return addTime;
     }
 
-    public void setAddTime(String addTime) {
+    public void setAddTime(Timestamp addTime) {
         this.addTime = addTime;
     }
 

@@ -65,9 +65,9 @@ public class AdvertisementRepository implements CommonRepository<Advertisement> 
     }
 
     @Override
-    public void update(int id, Advertisement advertisement) {
+    public void update(Advertisement advertisement) {
         jdbcTemplate.update("UPDATE advertisement SET title = ?, description = ?, add_date = ? WHERE id = ?",
-                advertisement.getTitle(), advertisement.getDescription(), advertisement.getAddTime(), id);
+                advertisement.getTitle(), advertisement.getDescription(), advertisement.getAddTime(), advertisement.getId());
     }
 
     @Override

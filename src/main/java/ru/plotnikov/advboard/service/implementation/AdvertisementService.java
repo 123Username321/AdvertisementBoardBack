@@ -34,8 +34,8 @@ public class AdvertisementService implements CommonService<Advertisement> {
     }
 
     @Override
-    public void updateEntity(int id, Advertisement advertisement) {
-        advRepo.update(id, advertisement);
+    public void updateEntity(Advertisement advertisement) {
+        advRepo.update(advertisement);
     }
 
     @Override

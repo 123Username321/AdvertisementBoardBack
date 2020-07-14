@@ -6,6 +6,6 @@ public interface CommonService<T> {
     List<T> getAll();
     T getById(int id);
     int insertEntity(T entity);
-    void updateEntity(int id, T entity);
+    void updateEntity(T entity);
     void deleteEntity(int id);
 }
