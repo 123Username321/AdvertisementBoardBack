@@ -6,6 +6,11 @@ public class AdvertisementRequest {
     private String title;
     private String description;
 
+    public AdvertisementRequest(String title, String description) {
+        this.title = title;
+        this.description = description;
+    }
+
     public String getTitle() {
         return title;
     }

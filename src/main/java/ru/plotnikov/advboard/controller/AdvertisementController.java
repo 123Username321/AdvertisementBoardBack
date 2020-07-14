@@ -1,6 +1,5 @@
 package ru.plotnikov.advboard.controller;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,15 +8,15 @@ import org.springframework.web.bind.annotation.*;
 
 import ru.plotnikov.advboard.model.Advertisement;
 import ru.plotnikov.advboard.model.AdvertisementRequest;
-import ru.plotnikov.advboard.service.CommonService;
+import ru.plotnikov.advboard.service.AdvertisementService;
 
 @RestController
 @RequestMapping("/advertisement")
 public class AdvertisementController {
-    private final CommonService<Advertisement> advService;
+    private final AdvertisementService advService;
 
     @Autowired
-    public AdvertisementController(@Qualifier("advertisementService") CommonService<Advertisement> advService) {
+    public AdvertisementController(AdvertisementService advService) {
         this.advService = advService;
     }
 
@@ -33,18 +32,16 @@ public class AdvertisementController {
 
     @PostMapping("/add")
     public int create(@RequestBody AdvertisementRequest advertisement) {
-        return advService.insertEntity(new Advertisement(0, advertisement.getTitle(),
-                advertisement.getDescription(), null));
+        return advService.insert(new AdvertisementRequest(advertisement.getTitle(), advertisement.getDescription()));
     }
 
     @PutMapping("/{id}")
     void modifyById(@PathVariable int id, @RequestBody AdvertisementRequest advertisement) {
-        advService.updateEntity(new Advertisement(id, advertisement.getTitle(),
-                advertisement.getDescription(), null));
+        advService.update(id, new AdvertisementRequest(advertisement.getTitle(), advertisement.getDescription()));
     }
 
     @DeleteMapping("/{id}")
     void deleteById(@PathVariable int id) {
-        advService.deleteEntity(id);
+        advService.delete(id);
     }
 }

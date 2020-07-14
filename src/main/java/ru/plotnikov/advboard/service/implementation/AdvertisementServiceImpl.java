@@ -4,17 +4,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.plotnikov.advboard.model.Advertisement;
+import ru.plotnikov.advboard.model.AdvertisementRequest;
 import ru.plotnikov.advboard.repository.CommonRepository;
-import ru.plotnikov.advboard.service.CommonService;
+import ru.plotnikov.advboard.service.AdvertisementService;
 
 import java.util.List;
 
 @Service
-public class AdvertisementService implements CommonService<Advertisement> {
+public class AdvertisementServiceImpl implements AdvertisementService {
     private final CommonRepository<Advertisement> advRepo;
 
     @Autowired
-    public AdvertisementService(@Qualifier("advertisementRepository") CommonRepository<Advertisement> advRepo) {
+    public AdvertisementServiceImpl(@Qualifier("advertisementRepository") CommonRepository<Advertisement> advRepo) {
         this.advRepo = advRepo;
     }
 
@@ -29,17 +30,17 @@ public class AdvertisementService implements CommonService<Advertisement> {
     }
 
     @Override
-    public int insertEntity(Advertisement advertisement) {
-        return advRepo.insert(advertisement);
+    public int insert(AdvertisementRequest advertisement) {
+        return advRepo.insert(new Advertisement(0, advertisement.getTitle(), advertisement.getDescription(), null));
     }
 
     @Override
-    public void updateEntity(Advertisement advertisement) {
-        advRepo.update(advertisement);
+    public void update(int id, AdvertisementRequest advertisement) {
+        advRepo.update(new Advertisement(id, advertisement.getTitle(), advertisement.getDescription(), null));
     }
 
     @Override
-    public void deleteEntity(int id) {
+    public void delete(int id) {
         advRepo.delete(id);
     }
 }
