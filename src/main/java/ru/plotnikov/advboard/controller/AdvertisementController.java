@@ -1,20 +1,22 @@
-package ru.plotnikov.advboard.contoller;
+package ru.plotnikov.advboard.controller;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import ru.plotnikov.advboard.model.Advertisement;
+import ru.plotnikov.advboard.service.CommonService;
 import ru.plotnikov.advboard.service.implementation.AdvertisementService;
 
 @RestController
 @RequestMapping("/advertisement")
 public class AdvertisementController {
-    private final AdvertisementService advService;
+    private final CommonService<Advertisement> advService;
 
     @Autowired
-    public AdvertisementController(AdvertisementService advService) {
+    public AdvertisementController(@Qualifier("advertisementService") CommonService<Advertisement> advService) {
         this.advService = advService;
     }
 
