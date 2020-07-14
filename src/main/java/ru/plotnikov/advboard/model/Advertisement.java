@@ -3,10 +3,10 @@ package ru.plotnikov.advboard.model;
 import java.sql.Timestamp;
 
 public class Advertisement {
-    int id;
-    String title;
-    String description;
-    Timestamp addTime;
+    private int id;
+    private String title;
+    private String description;
+    private Timestamp addTime;
 
     public Advertisement(int id, String title, String description, Timestamp addTime) {
         this.id = id;
