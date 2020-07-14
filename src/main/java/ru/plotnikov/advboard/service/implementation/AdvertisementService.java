@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.plotnikov.advboard.model.Advertisement;
 import ru.plotnikov.advboard.repository.CommonRepository;
-import ru.plotnikov.advboard.repository.implementation.AdvertisementRepository;
 import ru.plotnikov.advboard.service.CommonService;
 
 import java.util.List;
@@ -27,5 +26,20 @@ public class AdvertisementService implements CommonService<Advertisement> {
     @Override
     public Advertisement getById(int id) {
         return advRepo.findById(id);
+    }
+
+    @Override
+    public int insertEntity(Advertisement advertisement) {
+        return advRepo.insert(advertisement);
+    }
+
+    @Override
+    public void updateEntity(int id, Advertisement advertisement) {
+        advRepo.update(id, advertisement);
+    }
+
+    @Override
+    public void deleteEntity(int id) {
+        advRepo.delete(id);
     }
 }
