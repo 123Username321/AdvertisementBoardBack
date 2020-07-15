@@ -35,8 +35,12 @@ public class AdvertisementController {
                                                      @RequestParam("page_size") int pageSize) {
         System.out.println(pageNumber + "  " + pageSize);
 
-        if (pageNumber < 1) pageNumber = 1;
-        if (pageSize < 1) pageSize = 10;
+        if (pageNumber < 1) {
+            pageNumber = 1;
+        }
+        if (pageSize < 1) {
+            pageSize = 10;
+        }
 
         return advService.getWithPaging(pageNumber, pageSize);
     }
