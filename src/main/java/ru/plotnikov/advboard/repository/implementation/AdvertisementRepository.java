@@ -33,8 +33,10 @@ public class AdvertisementRepository implements CommonRepository<Advertisement> 
     public List<Advertisement> findAll(String tag) {
         String sqlQuery = "SELECT * FROM advertisement WHERE (:titleTag IS NULL OR title LIKE :titleTag);";
 
-        Map<String, Object> params = new HashMap<>();
-        params.put("titleTag", tag == null ? null : "%" + tag + "%");
+//        Map<String, Object> params = new HashMap<>();
+//        params.put("titleTag", tag == null ? null : "%" + tag + "%");
+        SqlParameterSource params = new MapSqlParameterSource()
+                .addValue("title", tag == null ? null : "%" + tag + "%", Types.VARCHAR);
 
         return jdbcTemplate.query(sqlQuery, params,
                 new RowMapper<Advertisement>() {
@@ -51,9 +53,12 @@ public class AdvertisementRepository implements CommonRepository<Advertisement> 
         String sqlQuery = "SELECT id, title, description, add_date, COUNT(*) OVER() " +
                           "AS \"total_count\" FROM advertisement LIMIT :offset, :count";
 
-        Map<String, Object> params = new HashMap<>();
-        params.put("offset", (pageNumber - 1) * pageSize);
-        params.put("count", pageSize);
+//        Map<String, Object> params = new HashMap<>();
+//        params.put("offset", (pageNumber - 1) * pageSize);
+//        params.put("count", pageSize);
+        SqlParameterSource params = new MapSqlParameterSource()
+                .addValue("offset", (pageNumber - 1) * pageSize, Types.INTEGER)
+                .addValue("count", pageSize, Types.INTEGER);
 
         return jdbcTemplate.query(sqlQuery, params,
                 new ResultSetExtractor<PagingResult<Advertisement>>() {
@@ -77,8 +82,10 @@ public class AdvertisementRepository implements CommonRepository<Advertisement> 
     public Advertisement findById(int id) {
         String sqlQuery = "SELECT * FROM advertisement WHERE id = :id";
 
-        Map<String, Object> params = new HashMap<>();
-        params.put("id", id);
+//        Map<String, Object> params = new HashMap<>();
+//        params.put("id", id);
+        SqlParameterSource params = new MapSqlParameterSource()
+                .addValue("id", id, Types.INTEGER);
 
         return jdbcTemplate.query(sqlQuery, params, new RowMapper<Advertisement>() {
                     @Override
@@ -92,24 +99,14 @@ public class AdvertisementRepository implements CommonRepository<Advertisement> 
     @Override
     public int insert(Advertisement advertisement) {
         String sqlQuery = "INSERT INTO advertisement VALUES (DEFAULT, :title, :description, NOW())";
-//        Map<String, Object> params = new HashMap<>();
-//        params.put("name", name);
 
         SqlParameterSource parameterSource = new MapSqlParameterSource()
-                .addValue("title", advertisement.getTitle())
-                .addValue("description", advertisement.getDescription());
+                .addValue("title", advertisement.getTitle(), Types.VARCHAR)
+                .addValue("description", advertisement.getDescription(), Types.VARCHAR);
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(sqlQuery, parameterSource, keyHolder);
-
-//        jdbcTemplate.update(connection -> {
-//            PreparedStatement ps = connection.prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS);
-//            ps.setString(1, advertisement.getTitle());
-//            ps.setString(2, advertisement.getDescription());
-//            ps.setString(3, (new Timestamp((new java.util.Date()).getTime())).toString());
-//            return ps;
-//        }, keyHolder);
 
         return keyHolder.getKey() != null ? keyHolder.getKey().intValue() : -1;
     }
@@ -118,10 +115,14 @@ public class AdvertisementRepository implements CommonRepository<Advertisement> 
     public void update(Advertisement advertisement) {
         String sqlQuery = "UPDATE advertisement SET title = :title, description = :description WHERE id = :id";
 
-        Map<String, Object> params = new HashMap<>();
-        params.put("title", advertisement.getTitle());
-        params.put("description", advertisement.getDescription());
-        params.put("id", advertisement.getId());
+//        Map<String, Object> params = new HashMap<>();
+//        params.put("title", advertisement.getTitle());
+//        params.put("description", advertisement.getDescription());
+//        params.put("id", advertisement.getId());
+        SqlParameterSource params = new MapSqlParameterSource()
+                .addValue("title", advertisement.getTitle(), Types.VARCHAR)
+                .addValue("description", advertisement.getDescription(), Types.VARCHAR)
+                .addValue("id", advertisement.getId(), Types.INTEGER);
 
         jdbcTemplate.update(sqlQuery, params);
     }
@@ -130,8 +131,10 @@ public class AdvertisementRepository implements CommonRepository<Advertisement> 
     public void delete(int id) {
         String sqlQuery = "DELETE FROM advertisement WHERE id = :id";
 
-        Map<String, Object> params = new HashMap<>();
-        params.put("id", id);
+//        Map<String, Object> params = new HashMap<>();
+//        params.put("id", id);
+        SqlParameterSource params = new MapSqlParameterSource()
+                .addValue("id", id, Types.INTEGER);
 
         jdbcTemplate.update(sqlQuery, params);
     }
