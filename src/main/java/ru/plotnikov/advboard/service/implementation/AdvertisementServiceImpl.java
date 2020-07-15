@@ -6,23 +6,25 @@ import org.springframework.stereotype.Service;
 import ru.plotnikov.advboard.model.Advertisement;
 import ru.plotnikov.advboard.model.AdvertisementRequest;
 import ru.plotnikov.advboard.model.PagingResult;
-import ru.plotnikov.advboard.repository.CommonRepository;
+import ru.plotnikov.advboard.repository.AdvertisementRepository;
 import ru.plotnikov.advboard.service.AdvertisementService;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Service
 public class AdvertisementServiceImpl implements AdvertisementService {
-    private final CommonRepository<Advertisement> advRepo;
+    private final AdvertisementRepository advRepo;
 
     @Autowired
-    public AdvertisementServiceImpl(@Qualifier("advertisementRepository") CommonRepository<Advertisement> advRepo) {
+    public AdvertisementServiceImpl(@Qualifier("advertisementRepositoryImpl") AdvertisementRepository advRepo) {
         this.advRepo = advRepo;
     }
 
     @Override
-    public List<Advertisement> getAll(String tag) {
-        return advRepo.findAll(tag);
+    public List<Advertisement> getAll(String titleTag, String descriptionTag,
+                                      Timestamp startTimestamp, Timestamp endTimestamp) {
+        return advRepo.findAll(titleTag, descriptionTag, startTimestamp, endTimestamp);
     }
 
     @Override

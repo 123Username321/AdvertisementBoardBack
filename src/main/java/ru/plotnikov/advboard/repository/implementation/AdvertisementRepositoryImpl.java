@@ -12,31 +12,37 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import ru.plotnikov.advboard.model.Advertisement;
 import ru.plotnikov.advboard.model.PagingResult;
-import ru.plotnikov.advboard.repository.CommonRepository;
+import ru.plotnikov.advboard.repository.AdvertisementRepository;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Repository
-public class AdvertisementRepository implements CommonRepository<Advertisement> {
+public class AdvertisementRepositoryImpl implements AdvertisementRepository {
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
     @Autowired
-    public AdvertisementRepository(NamedParameterJdbcTemplate jdbcTemplate) {
+    public AdvertisementRepositoryImpl(NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
-    public List<Advertisement> findAll(String tag) {
-        String sqlQuery = "SELECT * FROM advertisement WHERE (:titleTag IS NULL OR title LIKE :titleTag);";
+    public List<Advertisement> findAll(String titleTag, String descriptionTag,
+                                       Timestamp startTimestamp, Timestamp endTimestamp) {
+        String sqlQuery = "SELECT * FROM advertisement" +
+                " WHERE (:titleTag IS NULL OR title LIKE :titleTag) AND" +
+                " (:descriptionTag IS NULL OR description LIKE :descriptionTag) AND" +
+                " (:startTimestamp IS NULL OR add_date >= :startTimestamp) AND" +
+                " (:endTimestamp IS NULL OR add_date <= :endTimestamp)";
 
-//        Map<String, Object> params = new HashMap<>();
-//        params.put("titleTag", tag == null ? null : "%" + tag + "%");
         SqlParameterSource params = new MapSqlParameterSource()
-                .addValue("titleTag", tag == null ? null : "%" + tag + "%", Types.VARCHAR);
+                .addValue("titleTag", titleTag == null ? null : "%" + titleTag + "%", Types.VARCHAR)
+                .addValue("descriptionTag",
+                        descriptionTag == null ? null : "%" + descriptionTag + "%",
+                        Types.VARCHAR)
+                .addValue("startTimestamp", startTimestamp, Types.TIMESTAMP)
+                .addValue("endTimestamp", endTimestamp, Types.TIMESTAMP);
 
         return jdbcTemplate.query(sqlQuery, params,
                 new RowMapper<Advertisement>() {
