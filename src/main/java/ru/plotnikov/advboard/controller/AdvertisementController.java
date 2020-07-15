@@ -30,11 +30,11 @@ public class AdvertisementController {
         return advService.getAll();
     }
 
-    @GetMapping(value = "/list", params = {"page", "amount"})
-    public PagingResult<Advertisement> getWithPaging(@RequestParam(required = false) Integer page,
-                                                     @RequestParam(required = false) Integer amount) {
-        if (page != null && amount != null)
-            return advService.getWithPaging(page, amount);
+    @GetMapping(value = "/list", params = {"page", "size"})
+    public PagingResult<Advertisement> getWithPaging(@RequestParam(required = false) Integer pageNumber,
+                                                     @RequestParam(required = false) Integer pageSize) {
+        if (pageNumber != null && pageSize != null)
+            return advService.getWithPaging(pageNumber, pageSize);
         else return null;
     }
 

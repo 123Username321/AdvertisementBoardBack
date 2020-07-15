@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface CommonRepository<T> {
     List<T> findAll();
-    PagingResult<T> findWithPaging(int page, int amount);
+    PagingResult<T> findWithPaging(int pageNumber, int pageSize);
     T findById(int id);
     int insert(T entity);
     void update(T entity);

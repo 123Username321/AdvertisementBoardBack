@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface AdvertisementService {
     List<Advertisement> getAll();
-    PagingResult<Advertisement> getWithPaging(int page, int amount);
+    PagingResult<Advertisement> getWithPaging(int pageNumber, int pageSize);
     Advertisement getById(int id);
     int insert(AdvertisementRequest entity);
     void update(int id, AdvertisementRequest entity);

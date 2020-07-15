@@ -26,8 +26,8 @@ public class AdvertisementServiceImpl implements AdvertisementService {
     }
 
     @Override
-    public PagingResult<Advertisement> getWithPaging(int page, int amount) {
-        return advRepo.findWithPaging(page, amount);
+    public PagingResult<Advertisement> getWithPaging(int pageNumber, int pageSize) {
+        return advRepo.findWithPaging(pageNumber, pageSize);
     }
 
     @Override
