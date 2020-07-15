@@ -1,13 +1,18 @@
 package ru.plotnikov.advboard.controller;
 
+import java.awt.print.Pageable;
+import java.sql.SQLOutput;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import ru.plotnikov.advboard.model.Advertisement;
 import ru.plotnikov.advboard.model.AdvertisementRequest;
+import ru.plotnikov.advboard.model.PagingResult;
 import ru.plotnikov.advboard.service.AdvertisementService;
 
 @RestController
@@ -23,6 +28,19 @@ public class AdvertisementController {
     @GetMapping("/list")
     public List<Advertisement> getAll() {
         return advService.getAll();
+    }
+
+    @GetMapping(value = "/list", params = {"page_number", "page_size"})
+    public PagingResult<Advertisement> getWithPaging(@RequestParam("page_number") int pageNumber,
+                                                     @RequestParam("page_size") int pageSize) {
+        if (pageNumber < 1) {
+            pageNumber = 1;
+        }
+        if (pageSize < 1) {
+            pageSize = 10;
+        }
+
+        return advService.getWithPaging(pageNumber, pageSize);
     }
 
     @GetMapping("/{id}")
