@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import ru.plotnikov.advboard.model.Advertisement;
 import ru.plotnikov.advboard.model.AdvertisementRequest;
+import ru.plotnikov.advboard.model.PagingResult;
 import ru.plotnikov.advboard.service.AdvertisementService;
 
 @RestController
@@ -24,13 +25,17 @@ public class AdvertisementController {
         this.advService = advService;
     }
 
-    @GetMapping("/list")
-    public List<Advertisement> getAll(@RequestParam(required = false) Integer page,
-                                      @RequestParam(required = false) Integer amount) {
-        if (page != null && amount != null) {
+    @GetMapping(value = "/list")
+    public List<Advertisement> getAll() {
+        return advService.getAll();
+    }
+
+    @GetMapping(value = "/list", params = {"page", "amount"})
+    public PagingResult<Advertisement> getWithPaging(@RequestParam(required = false) Integer page,
+                                                     @RequestParam(required = false) Integer amount) {
+        if (page != null && amount != null)
             return advService.getWithPaging(page, amount);
-        }
-        else return advService.getAll();
+        else return null;
     }
 
     @GetMapping("/{id}")

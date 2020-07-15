@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.plotnikov.advboard.model.Advertisement;
 import ru.plotnikov.advboard.model.AdvertisementRequest;
+import ru.plotnikov.advboard.model.PagingResult;
 import ru.plotnikov.advboard.repository.CommonRepository;
 import ru.plotnikov.advboard.service.AdvertisementService;
 
@@ -25,7 +26,7 @@ public class AdvertisementServiceImpl implements AdvertisementService {
     }
 
     @Override
-    public List<Advertisement> getWithPaging(int page, int amount) {
+    public PagingResult<Advertisement> getWithPaging(int page, int amount) {
         return advRepo.findWithPaging(page, amount);
     }
 
