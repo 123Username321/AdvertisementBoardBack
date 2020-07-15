@@ -1,9 +1,13 @@
 package ru.plotnikov.advboard.controller;
 
+import java.awt.print.Pageable;
+import java.sql.SQLOutput;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import ru.plotnikov.advboard.model.Advertisement;
@@ -21,8 +25,12 @@ public class AdvertisementController {
     }
 
     @GetMapping("/list")
-    public List<Advertisement> getAll() {
-        return advService.getAll();
+    public List<Advertisement> getAll(@RequestParam(required = false) Integer page,
+                                      @RequestParam(required = false) Integer amount) {
+        if (page != null && amount != null) {
+            return advService.getWithPaging(page, amount);
+        }
+        else return advService.getAll();
     }
 
     @GetMapping("/{id}")
