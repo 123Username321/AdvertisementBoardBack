@@ -3,6 +3,7 @@ package ru.plotnikov.advboard.service.implementation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.plotnikov.advboard.model.Advertisement;
 import ru.plotnikov.advboard.model.AdvertisementRequest;
 import ru.plotnikov.advboard.model.PagingResult;
@@ -38,16 +39,19 @@ public class AdvertisementServiceImpl implements AdvertisementService {
     }
 
     @Override
+    @Transactional
     public int insert(AdvertisementRequest advertisement) {
         return advRepo.insert(new Advertisement(0, advertisement.getTitle(), advertisement.getDescription(), null));
     }
 
     @Override
+    @Transactional
     public void update(int id, AdvertisementRequest advertisement) {
         advRepo.update(new Advertisement(id, advertisement.getTitle(), advertisement.getDescription(), null));
     }
 
     @Override
+    @Transactional
     public void delete(int id) {
         advRepo.delete(id);
     }
