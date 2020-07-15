@@ -26,23 +26,10 @@ public class AdvertisementController {
     @GetMapping("/list")
     public List<Advertisement> getAll(@RequestParam(value = "title", required = false) String titleTag,
                                       @RequestParam(value = "description", required = false) String descriptionTag,
-                                      @RequestParam(value = "start_timestamp", required = false) String startDate,
-                                      @RequestParam(value = "end_timestamp", required = false) String endDate) {
-
-        Timestamp startTimestamp = null;
-        Timestamp endTimestamp = null;
-
-        try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            startTimestamp = new Timestamp(dateFormat.parse(startDate).getTime());
-            endTimestamp = new Timestamp(dateFormat.parse(endDate).getTime());
-        } catch (Exception e) {
-            return null;
-        }
-
-        System.out.println(startTimestamp.toString() + "   " + endTimestamp.toString());
-
-        return advService.getAll(titleTag, descriptionTag, startTimestamp, endTimestamp);
+                                      @RequestParam(value = "start_timestamp", required = false) Timestamp startDate,
+                                      @RequestParam(value = "end_timestamp", required = false) Timestamp endDate) {
+        
+        return advService.getAll(titleTag, descriptionTag, startDate, endDate);
     }
 
     @GetMapping(value = "/list", params = {"page_number", "page_size"})
