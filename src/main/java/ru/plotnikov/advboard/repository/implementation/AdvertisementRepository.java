@@ -43,9 +43,6 @@ public class AdvertisementRepository implements CommonRepository<Advertisement> 
 
     @Override
     public PagingResult<Advertisement> findWithPaging(int pageNumber, int pageSize) {
-//        RowCountCallbackHandler countCallback = new RowCountCallbackHandler();
-//        jdbcTemplate.query("SELECT * FROM advertisement", countCallback);
-//        System.out.println(countCallback.getRowCount());
 
         return jdbcTemplate.query(
                 "SELECT id, title, description, add_date, COUNT(*) OVER() AS \"total_count\" FROM advertisement LIMIT ?, ?",
