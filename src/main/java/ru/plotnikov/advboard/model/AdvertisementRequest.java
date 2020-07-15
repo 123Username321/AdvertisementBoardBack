@@ -1,7 +1,5 @@
 package ru.plotnikov.advboard.model;
 
-import java.sql.Timestamp;
-
 public class AdvertisementRequest {
     private String title;
     private String description;

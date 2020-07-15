@@ -1,13 +1,8 @@
 package ru.plotnikov.advboard.controller;
 
-import java.awt.print.Pageable;
-import java.sql.SQLOutput;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import ru.plotnikov.advboard.model.Advertisement;
@@ -25,7 +20,7 @@ public class AdvertisementController {
         this.advService = advService;
     }
 
-    @GetMapping(value = "/list")
+    @GetMapping("/list")
     public List<Advertisement> getAll(@RequestParam(value = "title", required = false) String titleTag) {
         return advService.getAll(titleTag);
     }

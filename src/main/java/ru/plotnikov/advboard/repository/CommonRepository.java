@@ -1,6 +1,5 @@
 package ru.plotnikov.advboard.repository;
 
-import ru.plotnikov.advboard.model.Advertisement;
 import ru.plotnikov.advboard.model.PagingResult;
 
 import java.util.List;
