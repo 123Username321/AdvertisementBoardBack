@@ -28,7 +28,7 @@ public class AdvertisementController {
                                       @RequestParam(value = "description", required = false) String descriptionTag,
                                       @RequestParam(value = "start_timestamp", required = false) Timestamp startDate,
                                       @RequestParam(value = "end_timestamp", required = false) Timestamp endDate) {
-        
+
         return advService.getAll(titleTag, descriptionTag, startDate, endDate);
     }
 
