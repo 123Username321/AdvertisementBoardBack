@@ -6,13 +6,13 @@ public class Advertisement {
     private int id;
     private String title;
     private String description;
-    private Timestamp addTime;
+    private Timestamp addDateTime;
 
-    public Advertisement(int id, String title, String description, Timestamp addTime) {
+    public Advertisement(int id, String title, String description, Timestamp addDateTime) {
         this.id = id;
         this.title = title;
         this.description = description;
-        this.addTime = addTime;
+        this.addDateTime = addDateTime;
     }
 
     public int getId() {
@@ -39,15 +39,15 @@ public class Advertisement {
         this.description = description;
     }
 
-    public Timestamp getAddTime() {
-        return addTime;
+    public Timestamp getAddDateTime() {
+        return addDateTime;
     }
 
-    public void setAddTime(Timestamp addTime) {
-        this.addTime = addTime;
+    public void setAddDateTime(Timestamp addDateTime) {
+        this.addDateTime = addDateTime;
     }
 
     public String toString() {
-        return "{ id: " + this.id + ", title: " + this.title + ", description: " + this.description + ", addTime: " + this.addTime.toString() + "}";
+        return "{ id: " + this.id + ", title: " + this.title + ", description: " + this.description + ", addTime: " + this.addDateTime.toString() + "}";
     }
 }
