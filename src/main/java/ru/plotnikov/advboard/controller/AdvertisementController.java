@@ -25,14 +25,16 @@ public class AdvertisementController {
         this.advService = advService;
     }
 
-    @GetMapping(value = "/list")
+    @GetMapping("/list")
     public List<Advertisement> getAll() {
         return advService.getAll();
     }
 
     @GetMapping(value = "/list", params = {"page_number", "page_size"})
-    public PagingResult<Advertisement> getWithPaging(@RequestParam(required = true) Integer pageNumber,
-                                                     @RequestParam(required = true) Integer pageSize) {
+    public PagingResult<Advertisement> getWithPaging(@RequestParam(value="page_number", required = false) Integer pageNumber,
+                                                     @RequestParam(value="page_size", required = false) Integer pageSize) {
+        System.out.println(pageNumber + "  " + pageSize);
+
         if (pageNumber == null || pageNumber < 1) pageNumber = 1;
         if (pageSize == null || pageSize < 1) pageSize = 10;
 
