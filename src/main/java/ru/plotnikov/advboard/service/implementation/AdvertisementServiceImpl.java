@@ -21,8 +21,8 @@ public class AdvertisementServiceImpl implements AdvertisementService {
     }
 
     @Override
-    public List<Advertisement> getAll() {
-        return advRepo.findAll();
+    public List<Advertisement> getAll(String tag) {
+        return advRepo.findAll(tag);
     }
 
     @Override
