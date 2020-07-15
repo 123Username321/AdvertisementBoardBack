@@ -22,12 +22,14 @@ public class AdvertisementController {
 
     @GetMapping("/list")
     public List<Advertisement> getAll(@RequestParam(value = "title", required = false) String titleTag) {
+        System.out.println(1);
         return advService.getAll(titleTag);
     }
 
     @GetMapping(value = "/list", params = {"page_number", "page_size"})
     public PagingResult<Advertisement> getWithPaging(@RequestParam("page_number") int pageNumber,
                                                      @RequestParam("page_size") int pageSize) {
+        System.out.println(2);
         if (pageNumber < 1) {
             pageNumber = 1;
         }

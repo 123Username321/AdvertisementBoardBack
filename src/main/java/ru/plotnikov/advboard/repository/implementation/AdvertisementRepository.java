@@ -36,7 +36,7 @@ public class AdvertisementRepository implements CommonRepository<Advertisement> 
 //        Map<String, Object> params = new HashMap<>();
 //        params.put("titleTag", tag == null ? null : "%" + tag + "%");
         SqlParameterSource params = new MapSqlParameterSource()
-                .addValue("title", tag == null ? null : "%" + tag + "%", Types.VARCHAR);
+                .addValue("titleTag", tag == null ? null : "%" + tag + "%", Types.VARCHAR);
 
         return jdbcTemplate.query(sqlQuery, params,
                 new RowMapper<Advertisement>() {
@@ -73,7 +73,7 @@ public class AdvertisementRepository implements CommonRepository<Advertisement> 
                                                        rs.getTimestamp(4)));
                             count = rs.getInt(5);
                         }
-                        return new PagingResult<Advertisement>(count, pageNumber, pageSize, list);
+                        return new PagingResult<Advertisement>(count, pageSize, pageNumber, list);
                     }
                 });
     }
