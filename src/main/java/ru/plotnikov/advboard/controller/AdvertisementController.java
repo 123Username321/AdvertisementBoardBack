@@ -33,8 +33,6 @@ public class AdvertisementController {
     @GetMapping(value = "/list", params = {"page_number", "page_size"})
     public PagingResult<Advertisement> getWithPaging(@RequestParam("page_number") int pageNumber,
                                                      @RequestParam("page_size") int pageSize) {
-        System.out.println(pageNumber + "  " + pageSize);
-
         if (pageNumber < 1) {
             pageNumber = 1;
         }
