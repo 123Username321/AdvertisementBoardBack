@@ -25,6 +25,10 @@ public class AdvertisementServiceImpl implements AdvertisementService {
         return advRepo.findAll();
     }
 
+    public List<Advertisement> getAllByTag(String tag) {
+        return advRepo.findAllByTag(tag);
+    }
+
     @Override
     public PagingResult<Advertisement> getWithPaging(int pageNumber, int pageSize) {
         return advRepo.findWithPaging(pageNumber, pageSize);

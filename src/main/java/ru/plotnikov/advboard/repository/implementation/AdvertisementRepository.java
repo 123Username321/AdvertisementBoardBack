@@ -42,6 +42,21 @@ public class AdvertisementRepository implements CommonRepository<Advertisement> 
     }
 
     @Override
+    public List<Advertisement> findAllByTag(String tag) {
+        String sqlQuery = "SELECT * FROM advertisement WHERE title LIKE ?";
+
+        return jdbcTemplate.query(
+                sqlQuery, new Object[] { "%" + tag + "%" },
+                new RowMapper<Advertisement>() {
+                    @Override
+                    public Advertisement mapRow(ResultSet rs, int rowNum) throws SQLException {
+                        return new Advertisement(rs.getInt("id"), rs.getString("title"),
+                                rs.getString("description"), rs.getTimestamp("add_date"));
+                    }
+                });
+    }
+
+    @Override
     public PagingResult<Advertisement> findWithPaging(int pageNumber, int pageSize) {
 
         return jdbcTemplate.query(

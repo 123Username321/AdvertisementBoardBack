@@ -25,8 +25,10 @@ public class AdvertisementController {
         this.advService = advService;
     }
 
-    @GetMapping("/list")
-    public List<Advertisement> getAll() {
+    @GetMapping(value = "/list")
+    public List<Advertisement> getAll(@RequestParam(value = "title", required = false) String titleTag) {
+        System.out.println(titleTag); //DELETE!!!
+        if (titleTag != null && !titleTag.isEmpty()) return advService.getAllByTag(titleTag);
         return advService.getAll();
     }
 
