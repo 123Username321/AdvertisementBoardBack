@@ -27,9 +27,7 @@ public class AdvertisementController {
     public List<Advertisement> getAll(@RequestParam(value = "title", required = false) String titleTag,
                                       @RequestParam(value = "description", required = false) String descriptionTag,
                                       @RequestParam(value = "start_timestamp", required = false) Timestamp startDate,
-                                      @RequestParam(value = "end_timestamp", required = false) Timestamp endDate,
-                                      @RequestParam(value = "sort_type", required = false) String sortType,
-                                      @RequestParam(value = "sort_direct", required = false) String sortDirect) {
+                                      @RequestParam(value = "end_timestamp", required = false) Timestamp endDate) {
 
         return advService.getAll(titleTag, descriptionTag, startDate, endDate);
     }
