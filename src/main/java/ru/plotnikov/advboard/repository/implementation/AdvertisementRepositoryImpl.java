@@ -42,15 +42,6 @@ public class AdvertisementRepositoryImpl implements AdvertisementRepository {
 
         if (sortParameters != null) {
             for (SortParameters sortParameter : sortParameters) {
-//            if (sortParameter.getColumnName().equals("title")) {
-//                sqlQuery += " title " + (sortParameter.isDesc() ? "DESC" : "ASC") + ",";
-//            }
-//            else if (sortParameter.getColumnName().equals("description")) {
-//                sqlQuery += " description " + (sortParameter.isDesc() ? "DESC" : "ASC") + ",";
-//            }
-//            else if (sortParameter.getColumnName().equals("add_date")) {
-//                sqlQuery += " add_date " + (sortParameter.isDesc() ? "DESC" : "ASC") + ",";
-//            }
                 if (columns.contains(sortParameter.getColumnName())) {
                     sqlQuery += " " + sortParameter.getColumnName() + " " + (sortParameter.isDesc() ? "DESC" : "ASC") + ",";
                 }

@@ -40,7 +40,7 @@ public class AdvertisementController {
             try {
                 sortParameters = objectMapper.readValue(sortParameterJson, new TypeReference<List<SortParameters>>() {});
             } catch (Exception e) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+                return ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT).body(null);
             }
         }
 
