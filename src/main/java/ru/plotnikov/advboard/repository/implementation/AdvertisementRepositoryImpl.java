@@ -53,8 +53,8 @@ public class AdvertisementRepositoryImpl implements AdvertisementRepository {
                 " (:descriptionTag IS NULL OR description LIKE :descriptionTag) AND" +
                 " (:startTimestamp IS NULL OR add_date >= :startTimestamp) AND" +
                 " (:endTimestamp IS NULL OR add_date <= :endTimestamp)";
-        
-        sqlQuery += this.getOrderQuery(sortParameters);
+
+        sqlQuery += getOrderQuery(sortParameters);
 
         SqlParameterSource params = new MapSqlParameterSource()
                 .addValue("titleTag", titleTag == null ? null : "%" + titleTag + "%", Types.VARCHAR)
@@ -86,7 +86,7 @@ public class AdvertisementRepositoryImpl implements AdvertisementRepository {
                 " (:startTimestamp IS NULL OR add_date >= :startTimestamp) AND" +
                 " (:endTimestamp IS NULL OR add_date <= :endTimestamp)";
 
-        sqlQuery += this.getOrderQuery(sortParameters) + " LIMIT :offset, :count";
+        sqlQuery += getOrderQuery(sortParameters) + " LIMIT :offset, :count";
 
         SqlParameterSource params = new MapSqlParameterSource()
                 .addValue("offset", (pageNumber - 1) * pageSize, Types.INTEGER)
