@@ -27,12 +27,17 @@ public class AdvertisementServiceImpl implements AdvertisementService {
     public List<Advertisement> getAll(String titleTag, String descriptionTag,
                                       Timestamp startTimestamp, Timestamp endTimestamp,
                                       List<SortParameters> sortParameters) {
+
         return advRepo.findAll(titleTag, descriptionTag, startTimestamp, endTimestamp, sortParameters);
     }
 
     @Override
-    public PagingResult<Advertisement> getWithPaging(int pageNumber, int pageSize) {
-        return advRepo.findWithPaging(pageNumber, pageSize);
+    public PagingResult<Advertisement> getWithPaging(int pageNumber, int pageSize, String titleTag, String descriptionTag,
+                                                     Timestamp startTimestamp, Timestamp endTimestamp,
+                                                     List<SortParameters> sortParameters) {
+
+        return advRepo.findWithPaging(pageNumber, pageSize, titleTag, descriptionTag,
+                startTimestamp, endTimestamp, sortParameters);
     }
 
     @Override
