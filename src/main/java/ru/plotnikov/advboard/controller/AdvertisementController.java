@@ -1,16 +1,13 @@
 package ru.plotnikov.advboard.controller;
 
-import java.lang.reflect.Type;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import ru.plotnikov.advboard.model.Advertisement;
@@ -30,25 +27,25 @@ public class AdvertisementController {
     }
 
     @GetMapping("/list")
-    public List<Advertisement> getAll(@RequestParam(value = "title", required = false) String titleTag,
+    public ResponseEntity<List<Advertisement>> getAll(@RequestParam(value = "title", required = false) String titleTag,
                                       @RequestParam(value = "description", required = false) String descriptionTag,
                                       @RequestParam(value = "start_timestamp", required = false) Timestamp startDate,
                                       @RequestParam(value = "end_timestamp", required = false) Timestamp endDate,
-                                      @RequestParam(value = "sort", required = false) String sortParameter) {
+                                      @RequestParam(value = "sort", required = false) String sortParameterJson) {
 
         ObjectMapper objectMapper = new ObjectMapper();
 
-        List<SortParameters> sortParameters;
-        //sortParameters.add(new SortParameters("title", false));
-        //sortParameters.add(new SortParameters("description", true));
-        try {
-            sortParameters = objectMapper.readValue(sortParameter, new TypeReference<List<SortParameters>>() {});
-        }
-        catch (Exception e) {
-            return null;
+        List<SortParameters> sortParameters = null;
+        if (sortParameterJson != null && !sortParameterJson.isEmpty()) {
+            try {
+                sortParameters = objectMapper.readValue(sortParameterJson, new TypeReference<List<SortParameters>>() {});
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            }
         }
 
-        return advService.getAll(titleTag, descriptionTag, startDate, endDate, sortParameters);
+        return ResponseEntity.status(HttpStatus.OK).body(advService.getAll(
+                titleTag, descriptionTag, startDate, endDate, sortParameters));
     }
 
     @GetMapping(value = "/list", params = {"page_number", "page_size"})

@@ -40,7 +40,8 @@ public class AdvertisementRepositoryImpl implements AdvertisementRepository {
 
         Set<String> columns = new HashSet<String>(Arrays.asList("title", "description", "add_date"));
 
-        for (SortParameters sortParameter : sortParameters) {
+        if (sortParameters != null) {
+            for (SortParameters sortParameter : sortParameters) {
 //            if (sortParameter.getColumnName().equals("title")) {
 //                sqlQuery += " title " + (sortParameter.isDesc() ? "DESC" : "ASC") + ",";
 //            }
@@ -50,8 +51,9 @@ public class AdvertisementRepositoryImpl implements AdvertisementRepository {
 //            else if (sortParameter.getColumnName().equals("add_date")) {
 //                sqlQuery += " add_date " + (sortParameter.isDesc() ? "DESC" : "ASC") + ",";
 //            }
-            if (columns.contains(sortParameter.getColumnName())) {
-                sqlQuery += " " + sortParameter.getColumnName() + " " + (sortParameter.isDesc() ? "DESC" : "ASC") + ",";
+                if (columns.contains(sortParameter.getColumnName())) {
+                    sqlQuery += " " + sortParameter.getColumnName() + " " + (sortParameter.isDesc() ? "DESC" : "ASC") + ",";
+                }
             }
         }
 
