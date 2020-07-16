@@ -21,6 +21,22 @@ import java.util.*;
 @Repository
 public class AdvertisementRepositoryImpl implements AdvertisementRepository {
     private final NamedParameterJdbcTemplate jdbcTemplate;
+    private final String[] validColumns = {"title", "description", "add_date"};
+
+    private String getOrderQuery(List<SortParameters> sortParameters) {
+        String sqlQuery = " ORDER BY";
+        Set<String> columns = new HashSet<String>(Arrays.asList(this.validColumns));
+
+        if (sortParameters != null) {
+            for (SortParameters sortParameter : sortParameters) {
+                if (columns.contains(sortParameter.getColumnName())) {
+                    sqlQuery += " " + sortParameter.getColumnName() + " " + (sortParameter.isDesc() ? "DESC" : "ASC") + ",";
+                }
+            }
+        }
+
+        return sqlQuery + " id";
+    }
 
     @Autowired
     public AdvertisementRepositoryImpl(NamedParameterJdbcTemplate jdbcTemplate) {
@@ -35,20 +51,9 @@ public class AdvertisementRepositoryImpl implements AdvertisementRepository {
                 " WHERE (:titleTag IS NULL OR title LIKE :titleTag) AND" +
                 " (:descriptionTag IS NULL OR description LIKE :descriptionTag) AND" +
                 " (:startTimestamp IS NULL OR add_date >= :startTimestamp) AND" +
-                " (:endTimestamp IS NULL OR add_date <= :endTimestamp)" +
-                " ORDER BY";
+                " (:endTimestamp IS NULL OR add_date <= :endTimestamp)";
 
-        Set<String> columns = new HashSet<String>(Arrays.asList("title", "description", "add_date"));
-
-        if (sortParameters != null) {
-            for (SortParameters sortParameter : sortParameters) {
-                if (columns.contains(sortParameter.getColumnName())) {
-                    sqlQuery += " " + sortParameter.getColumnName() + " " + (sortParameter.isDesc() ? "DESC" : "ASC") + ",";
-                }
-            }
-        }
-
-        sqlQuery += " id";
+        sqlQuery += getOrderQuery(sortParameters);
 
         SqlParameterSource params = new MapSqlParameterSource()
                 .addValue("titleTag", titleTag == null ? null : "%" + titleTag + "%", Types.VARCHAR)
@@ -69,16 +74,28 @@ public class AdvertisementRepositoryImpl implements AdvertisementRepository {
     }
 
     @Override
-    public PagingResult<Advertisement> findWithPaging(int pageNumber, int pageSize) {
-        String sqlQuery = "SELECT id, title, description, add_date, COUNT(*) OVER() " +
-                          "AS \"total_count\" FROM advertisement LIMIT :offset, :count";
+    public PagingResult<Advertisement> findWithPaging(int pageNumber, int pageSize,
+                                                      String titleTag, String descriptionTag,
+                                                      Timestamp startTimestamp, Timestamp endTimestamp,
+                                                      List<SortParameters> sortParameters) {
+        String sqlQuery = "SELECT id, title, description, add_date, COUNT(*) OVER()" +
+                " AS \"total_count\" FROM advertisement" +
+                " WHERE (:titleTag IS NULL OR title LIKE :titleTag) AND" +
+                " (:descriptionTag IS NULL OR description LIKE :descriptionTag) AND" +
+                " (:startTimestamp IS NULL OR add_date >= :startTimestamp) AND" +
+                " (:endTimestamp IS NULL OR add_date <= :endTimestamp)";
 
-//        Map<String, Object> params = new HashMap<>();
-//        params.put("offset", (pageNumber - 1) * pageSize);
-//        params.put("count", pageSize);
+        sqlQuery += getOrderQuery(sortParameters) + " LIMIT :offset, :count";
+
         SqlParameterSource params = new MapSqlParameterSource()
                 .addValue("offset", (pageNumber - 1) * pageSize, Types.INTEGER)
-                .addValue("count", pageSize, Types.INTEGER);
+                .addValue("count", pageSize, Types.INTEGER)
+                .addValue("titleTag", titleTag == null ? null : "%" + titleTag + "%", Types.VARCHAR)
+                .addValue("descriptionTag",
+                        descriptionTag == null ? null : "%" + descriptionTag + "%",
+                        Types.VARCHAR)
+                .addValue("startTimestamp", startTimestamp, Types.TIMESTAMP)
+                .addValue("endTimestamp", endTimestamp, Types.TIMESTAMP);
 
         return jdbcTemplate.query(sqlQuery, params,
                 new ResultSetExtractor<PagingResult<Advertisement>>() {
@@ -102,8 +119,6 @@ public class AdvertisementRepositoryImpl implements AdvertisementRepository {
     public Advertisement findById(int id) {
         String sqlQuery = "SELECT * FROM advertisement WHERE id = :id";
 
-//        Map<String, Object> params = new HashMap<>();
-//        params.put("id", id);
         SqlParameterSource params = new MapSqlParameterSource()
                 .addValue("id", id, Types.INTEGER);
 
@@ -135,10 +150,6 @@ public class AdvertisementRepositoryImpl implements AdvertisementRepository {
     public void update(Advertisement advertisement) {
         String sqlQuery = "UPDATE advertisement SET title = :title, description = :description WHERE id = :id";
 
-//        Map<String, Object> params = new HashMap<>();
-//        params.put("title", advertisement.getTitle());
-//        params.put("description", advertisement.getDescription());
-//        params.put("id", advertisement.getId());
         SqlParameterSource params = new MapSqlParameterSource()
                 .addValue("title", advertisement.getTitle(), Types.VARCHAR)
                 .addValue("description", advertisement.getDescription(), Types.VARCHAR)
@@ -151,8 +162,6 @@ public class AdvertisementRepositoryImpl implements AdvertisementRepository {
     public void delete(int id) {
         String sqlQuery = "DELETE FROM advertisement WHERE id = :id";
 
-//        Map<String, Object> params = new HashMap<>();
-//        params.put("id", id);
         SqlParameterSource params = new MapSqlParameterSource()
                 .addValue("id", id, Types.INTEGER);
 

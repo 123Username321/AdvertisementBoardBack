@@ -34,13 +34,13 @@ public class AdvertisementController {
                                       @RequestParam(value = "sort", required = false) String sortParameterJson) {
 
         ObjectMapper objectMapper = new ObjectMapper();
-
         List<SortParameters> sortParameters = null;
+
         if (sortParameterJson != null && !sortParameterJson.isEmpty()) {
             try {
                 sortParameters = objectMapper.readValue(sortParameterJson, new TypeReference<List<SortParameters>>() {});
             } catch (Exception e) {
-                return ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT).body(null);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
             }
         }
 
@@ -49,8 +49,13 @@ public class AdvertisementController {
     }
 
     @GetMapping(value = "/list", params = {"page_number", "page_size"})
-    public PagingResult<Advertisement> getWithPaging(@RequestParam("page_number") int pageNumber,
-                                                     @RequestParam("page_size") int pageSize) {
+    public ResponseEntity<PagingResult<Advertisement>> getWithPaging(@RequestParam("page_number") int pageNumber,
+                                                     @RequestParam("page_size") int pageSize,
+                                                     @RequestParam(value = "title", required = false) String titleTag,
+                                                     @RequestParam(value = "description", required = false) String descriptionTag,
+                                                     @RequestParam(value = "start_timestamp", required = false) Timestamp startDate,
+                                                     @RequestParam(value = "end_timestamp", required = false) Timestamp endDate,
+                                                     @RequestParam(value = "sort", required = false) String sortParameterJson) {
 
         if (pageNumber < 1) {
             pageNumber = 1;
@@ -59,7 +64,19 @@ public class AdvertisementController {
             pageSize = 10;
         }
 
-        return advService.getWithPaging(pageNumber, pageSize);
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<SortParameters> sortParameters = null;
+
+        if (sortParameterJson != null && !sortParameterJson.isEmpty()) {
+            try {
+                sortParameters = objectMapper.readValue(sortParameterJson, new TypeReference<List<SortParameters>>() {});
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(advService.getWithPaging(
+                pageNumber, pageSize, titleTag, descriptionTag, startDate, endDate, sortParameters));
     }
 
     @GetMapping("/{id}")

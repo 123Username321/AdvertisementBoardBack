@@ -10,7 +10,9 @@ import java.util.List;
 public interface AdvertisementRepository {
     List<Advertisement> findAll(String titleTag, String descriptionTag, Timestamp startTimestamp, Timestamp endTimestamp,
                                 List<SortParameters> sortParameters);
-    PagingResult<Advertisement> findWithPaging(int pageNumber, int pageSize);
+    PagingResult<Advertisement> findWithPaging(int pageNumber, int pageSize, String titleTag, String descriptionTag,
+                                               Timestamp startTimestamp, Timestamp endTimestamp,
+                                               List<SortParameters> sortParameters);
     Advertisement findById(int id);
     int insert(Advertisement entity);
     void update(Advertisement entity);
