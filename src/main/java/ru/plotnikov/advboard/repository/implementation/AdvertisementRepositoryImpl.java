@@ -12,11 +12,11 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import ru.plotnikov.advboard.model.Advertisement;
 import ru.plotnikov.advboard.model.PagingResult;
+import ru.plotnikov.advboard.model.SortParameters;
 import ru.plotnikov.advboard.repository.AdvertisementRepository;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Repository
 public class AdvertisementRepositoryImpl implements AdvertisementRepository {
@@ -29,12 +29,26 @@ public class AdvertisementRepositoryImpl implements AdvertisementRepository {
 
     @Override
     public List<Advertisement> findAll(String titleTag, String descriptionTag,
-                                       Timestamp startTimestamp, Timestamp endTimestamp) {
+                                       Timestamp startTimestamp, Timestamp endTimestamp,
+                                       List<SortParameters> sortParameters) {
         String sqlQuery = "SELECT * FROM advertisement" +
                 " WHERE (:titleTag IS NULL OR title LIKE :titleTag) AND" +
                 " (:descriptionTag IS NULL OR description LIKE :descriptionTag) AND" +
                 " (:startTimestamp IS NULL OR add_date >= :startTimestamp) AND" +
-                " (:endTimestamp IS NULL OR add_date <= :endTimestamp)";
+                " (:endTimestamp IS NULL OR add_date <= :endTimestamp)" +
+                " ORDER BY";
+
+        Set<String> columns = new HashSet<String>(Arrays.asList("title", "description", "add_date"));
+
+        if (sortParameters != null) {
+            for (SortParameters sortParameter : sortParameters) {
+                if (columns.contains(sortParameter.getColumnName())) {
+                    sqlQuery += " " + sortParameter.getColumnName() + " " + (sortParameter.isDesc() ? "DESC" : "ASC") + ",";
+                }
+            }
+        }
+
+        sqlQuery += " id";
 
         SqlParameterSource params = new MapSqlParameterSource()
                 .addValue("titleTag", titleTag == null ? null : "%" + titleTag + "%", Types.VARCHAR)

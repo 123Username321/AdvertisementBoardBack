@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.plotnikov.advboard.model.Advertisement;
 import ru.plotnikov.advboard.model.AdvertisementRequest;
 import ru.plotnikov.advboard.model.PagingResult;
+import ru.plotnikov.advboard.model.SortParameters;
 import ru.plotnikov.advboard.repository.AdvertisementRepository;
 import ru.plotnikov.advboard.service.AdvertisementService;
 
@@ -24,8 +25,9 @@ public class AdvertisementServiceImpl implements AdvertisementService {
 
     @Override
     public List<Advertisement> getAll(String titleTag, String descriptionTag,
-                                      Timestamp startTimestamp, Timestamp endTimestamp) {
-        return advRepo.findAll(titleTag, descriptionTag, startTimestamp, endTimestamp);
+                                      Timestamp startTimestamp, Timestamp endTimestamp,
+                                      List<SortParameters> sortParameters) {
+        return advRepo.findAll(titleTag, descriptionTag, startTimestamp, endTimestamp, sortParameters);
     }
 
     @Override
