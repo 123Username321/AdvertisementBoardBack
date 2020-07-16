@@ -25,7 +25,7 @@ public class AdvertisementRepositoryImpl implements AdvertisementRepository {
     private final String[] validColumns = {"title", "description", "add_date"};
 
     private String getOrderQuery(List<SortParameters> sortParameters) {
-        String sqlQuery = "";
+        String sqlQuery = " ORDER BY";
         Set<String> columns = new HashSet<String>(Arrays.asList(this.validColumns));
 
         if (sortParameters != null) {
@@ -36,7 +36,7 @@ public class AdvertisementRepositoryImpl implements AdvertisementRepository {
             }
         }
 
-        return sqlQuery;
+        return sqlQuery + " id";
     }
 
     @Autowired
@@ -52,21 +52,9 @@ public class AdvertisementRepositoryImpl implements AdvertisementRepository {
                 " WHERE (:titleTag IS NULL OR title LIKE :titleTag) AND" +
                 " (:descriptionTag IS NULL OR description LIKE :descriptionTag) AND" +
                 " (:startTimestamp IS NULL OR add_date >= :startTimestamp) AND" +
-                " (:endTimestamp IS NULL OR add_date <= :endTimestamp)" +
-                " ORDER BY";
-
-//        Set<String> columns = new HashSet<String>(Arrays.asList(this.validColumns));
-//
-//        if (sortParameters != null) {
-//            for (SortParameters sortParameter : sortParameters) {
-//                if (columns.contains(sortParameter.getColumnName())) {
-//                    sqlQuery += " " + sortParameter.getColumnName() + " " + (sortParameter.isDesc() ? "DESC" : "ASC") + ",";
-//                }
-//            }
-//        }
+                " (:endTimestamp IS NULL OR add_date <= :endTimestamp)";
+        
         sqlQuery += this.getOrderQuery(sortParameters);
-
-        sqlQuery += " id";
 
         SqlParameterSource params = new MapSqlParameterSource()
                 .addValue("titleTag", titleTag == null ? null : "%" + titleTag + "%", Types.VARCHAR)
@@ -96,24 +84,9 @@ public class AdvertisementRepositoryImpl implements AdvertisementRepository {
                 " WHERE (:titleTag IS NULL OR title LIKE :titleTag) AND" +
                 " (:descriptionTag IS NULL OR description LIKE :descriptionTag) AND" +
                 " (:startTimestamp IS NULL OR add_date >= :startTimestamp) AND" +
-                " (:endTimestamp IS NULL OR add_date <= :endTimestamp)" +
-                " ORDER BY";
+                " (:endTimestamp IS NULL OR add_date <= :endTimestamp)";
 
-//        Set<String> columns = new HashSet<String>(Arrays.asList("title", "description", "add_date"));
-//
-//        if (sortParameters != null) {
-//            for (SortParameters sortParameter : sortParameters) {
-//                if (columns.contains(sortParameter.getColumnName())) {
-//                    sqlQuery += " " + sortParameter.getColumnName() + " " + (sortParameter.isDesc() ? "DESC" : "ASC") + ",";
-//                }
-//            }
-//        }
-        sqlQuery += this.getOrderQuery(sortParameters);
-
-        sqlQuery += " id LIMIT :offset, :count";
-
-        //String sqlQuery = "SELECT id, title, description, add_date, COUNT(*) OVER() " +
-        //                  "AS \"total_count\" FROM advertisement LIMIT :offset, :count";
+        sqlQuery += this.getOrderQuery(sortParameters) + " LIMIT :offset, :count";
 
         SqlParameterSource params = new MapSqlParameterSource()
                 .addValue("offset", (pageNumber - 1) * pageSize, Types.INTEGER)
