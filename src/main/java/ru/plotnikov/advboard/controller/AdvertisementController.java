@@ -6,13 +6,13 @@ import java.util.List;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import ru.plotnikov.advboard.model.Advertisement;
 import ru.plotnikov.advboard.model.AdvertisementRequest;
-import ru.plotnikov.advboard.model.PagingResult;
 import ru.plotnikov.advboard.model.SortParameters;
 import ru.plotnikov.advboard.service.AdvertisementService;
 
@@ -28,10 +28,10 @@ public class AdvertisementController {
 
     @GetMapping("/list")
     public ResponseEntity<List<Advertisement>> getAll(@RequestParam(value = "title", required = false) String titleTag,
-                                      @RequestParam(value = "description", required = false) String descriptionTag,
-                                      @RequestParam(value = "start_timestamp", required = false) Timestamp startDate,
-                                      @RequestParam(value = "end_timestamp", required = false) Timestamp endDate,
-                                      @RequestParam(value = "sort", required = false) String sortParameterJson) {
+                                                      @RequestParam(value = "description", required = false) String descriptionTag,
+                                                      @RequestParam(value = "start_timestamp", required = false) Timestamp startDate,
+                                                      @RequestParam(value = "end_timestamp", required = false) Timestamp endDate,
+                                                      @RequestParam(value = "sort", required = false) String sortParameterJson) {
 
         ObjectMapper objectMapper = new ObjectMapper();
         List<SortParameters> sortParameters = null;
@@ -44,18 +44,17 @@ public class AdvertisementController {
             }
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body(advService.getAll(
-                titleTag, descriptionTag, startDate, endDate, sortParameters));
+        return ResponseEntity.status(HttpStatus.OK).body(advService.getAll(titleTag, descriptionTag, startDate, endDate, sortParameters));
     }
 
     @GetMapping(value = "/list", params = {"page_number", "page_size"})
-    public ResponseEntity<PagingResult<Advertisement>> getWithPaging(@RequestParam("page_number") int pageNumber,
-                                                     @RequestParam("page_size") int pageSize,
-                                                     @RequestParam(value = "title", required = false) String titleTag,
-                                                     @RequestParam(value = "description", required = false) String descriptionTag,
-                                                     @RequestParam(value = "start_timestamp", required = false) Timestamp startDate,
-                                                     @RequestParam(value = "end_timestamp", required = false) Timestamp endDate,
-                                                     @RequestParam(value = "sort", required = false) String sortParameterJson) {
+    public ResponseEntity<Page<Advertisement>> getWithPaging(@RequestParam("page_number") int pageNumber,
+                                                             @RequestParam("page_size") int pageSize,
+                                                             @RequestParam(value = "title", required = false) String titleTag,
+                                                             @RequestParam(value = "description", required = false) String descriptionTag,
+                                                             @RequestParam(value = "start_timestamp", required = false) Timestamp startDate,
+                                                             @RequestParam(value = "end_timestamp", required = false) Timestamp endDate,
+                                                             @RequestParam(value = "sort", required = false) String sortParameterJson) {
 
         if (pageNumber < 1) {
             pageNumber = 1;
@@ -75,7 +74,7 @@ public class AdvertisementController {
             }
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body(advService.getWithPaging(
+        return ResponseEntity.status(HttpStatus.OK).body(advService.getAllWithPaging(
                 pageNumber, pageSize, titleTag, descriptionTag, startDate, endDate, sortParameters));
     }
 
@@ -85,7 +84,7 @@ public class AdvertisementController {
     }
 
     @PostMapping("/add")
-    public int create(@RequestBody AdvertisementRequest advertisementRequest) {
+    public int insert(@RequestBody AdvertisementRequest advertisementRequest) {
         return advService.insert(advertisementRequest);
     }
 
@@ -96,6 +95,6 @@ public class AdvertisementController {
 
     @DeleteMapping("/{id}")
     void deleteById(@PathVariable int id) {
-        advService.delete(id);
+        advService.deleteById(id);
     }
 }

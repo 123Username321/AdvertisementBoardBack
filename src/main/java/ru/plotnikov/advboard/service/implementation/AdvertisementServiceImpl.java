@@ -1,43 +1,84 @@
 package ru.plotnikov.advboard.service.implementation;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.plotnikov.advboard.model.Advertisement;
 import ru.plotnikov.advboard.model.AdvertisementRequest;
-import ru.plotnikov.advboard.model.PagingResult;
 import ru.plotnikov.advboard.model.SortParameters;
 import ru.plotnikov.advboard.repository.AdvertisementRepository;
 import ru.plotnikov.advboard.service.AdvertisementService;
 
 import java.sql.Timestamp;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class AdvertisementServiceImpl implements AdvertisementService {
     private final AdvertisementRepository advRepo;
+    private final String[] validColumns = {"title", "description", "add_date"};
+
+    private Sort getSortQuery(List<SortParameters> sortParameters) {
+
+        List<Sort.Order> orders = new ArrayList<>();
+        Set<String> columns = new HashSet<String>(Arrays.asList(this.validColumns));
+
+        if (sortParameters != null) {
+            for (SortParameters sortParameter : sortParameters) {
+                if (columns.contains(sortParameter.getColumnName())) {
+                    if (sortParameter.isDesc()) {
+                        orders.add(new Sort.Order(Sort.Direction.DESC, sortParameter.getColumnName()));
+                    }
+                    else {
+                        orders.add(new Sort.Order(Sort.Direction.ASC, sortParameter.getColumnName()));
+                    }
+                }
+            }
+        }
+
+        orders.add(new Sort.Order(Sort.Direction.ASC, "id"));
+
+        return Sort.by(orders);
+    }
 
     @Autowired
-    public AdvertisementServiceImpl(@Qualifier("advertisementRepositoryImpl") AdvertisementRepository advRepo) {
+    public AdvertisementServiceImpl(AdvertisementRepository advRepo) {
         this.advRepo = advRepo;
     }
+
 
     @Override
     public List<Advertisement> getAll(String titleTag, String descriptionTag,
                                       Timestamp startTimestamp, Timestamp endTimestamp,
                                       List<SortParameters> sortParameters) {
 
-        return advRepo.findAll(titleTag, descriptionTag, startTimestamp, endTimestamp, sortParameters);
+        if (titleTag != null) {
+            titleTag = "%" + titleTag + "%";
+        }
+        if (descriptionTag != null) {
+            descriptionTag = "%" + descriptionTag + "%";
+        }
+
+        return advRepo.findAll(titleTag, descriptionTag, startTimestamp, endTimestamp,
+                getSortQuery(sortParameters));
     }
 
     @Override
-    public PagingResult<Advertisement> getWithPaging(int pageNumber, int pageSize, String titleTag, String descriptionTag,
-                                                     Timestamp startTimestamp, Timestamp endTimestamp,
-                                                     List<SortParameters> sortParameters) {
+    public Page<Advertisement> getAllWithPaging(int pageNumber, int pageSize, String titleTag, String descriptionTag,
+                                                Timestamp startTimestamp, Timestamp endTimestamp,
+                                                List<SortParameters> sortParameters) {
 
-        return advRepo.findWithPaging(pageNumber, pageSize, titleTag, descriptionTag,
-                startTimestamp, endTimestamp, sortParameters);
+        if (titleTag != null) {
+            titleTag = "%" + titleTag + "%";
+        }
+        if (descriptionTag != null) {
+            descriptionTag = "%" + descriptionTag + "%";
+        }
+
+        return advRepo.findAllWithPaging(titleTag, descriptionTag, startTimestamp, endTimestamp,
+                PageRequest.of(pageNumber - 1, pageSize, getSortQuery(sortParameters)));
     }
 
     @Override
@@ -47,19 +88,19 @@ public class AdvertisementServiceImpl implements AdvertisementService {
 
     @Override
     @Transactional
-    public int insert(AdvertisementRequest advertisement) {
-        return advRepo.insert(new Advertisement(0, advertisement.getTitle(), advertisement.getDescription(), null));
+    public int insert(AdvertisementRequest advReq) {
+        return advRepo.save(new Advertisement(advReq.getTitle(), advReq.getDescription())).getId();
     }
 
     @Override
     @Transactional
-    public void update(int id, AdvertisementRequest advertisement) {
-        advRepo.update(new Advertisement(id, advertisement.getTitle(), advertisement.getDescription(), null));
+    public void update(int id, AdvertisementRequest advReq) {
+        advRepo.update(id, advReq.getTitle(), advReq.getDescription());
     }
 
     @Override
     @Transactional
-    public void delete(int id) {
-        advRepo.delete(id);
+    public void deleteById(int id) {
+        advRepo.deleteById(id);
     }
 }

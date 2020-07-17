@@ -1,12 +1,28 @@
 package ru.plotnikov.advboard.model;
 
+import javax.persistence.*;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
+@Entity
 public class Advertisement {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String title;
     private String description;
+
+    @Column(name = "add_date")
     private Timestamp addDateTime;
+
+    public Advertisement() { }
+
+    public Advertisement(String title, String description) {
+        this.id = 0;
+        this.title = title;
+        this.description = description;
+        this.addDateTime = Timestamp.valueOf(LocalDateTime.now());
+    }
 
     public Advertisement(int id, String title, String description, Timestamp addDateTime) {
         this.id = id;
