@@ -1,5 +1,7 @@
 package ru.plotnikov.advboard.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -9,11 +11,18 @@ public class Advertisement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @ManyToOne
+    @JoinColumn(name="category_id", referencedColumnName = "id")
+    @JsonIgnore
+    private Category category;
     private String title;
     private String description;
 
     @Column(name = "add_date")
     private Timestamp addDateTime;
+
+    //===Methods===
 
     public Advertisement() { }
 
@@ -61,6 +70,14 @@ public class Advertisement {
 
     public void setAddDateTime(Timestamp addDateTime) {
         this.addDateTime = addDateTime;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public String toString() {

@@ -33,14 +33,10 @@ public interface AdvertisementRepository extends JpaRepository<Advertisement, In
                                           @Param("descriptionTag") String descriptionTag,
                                           @Param("startTimestamp") Timestamp startTimestamp,
                                           @Param("endTimestamp") Timestamp endTimestamp, Pageable pagable);
-    Advertisement findById(int Id);
 
-    <S extends Advertisement> S save(S advertisement);
-
+    Advertisement findById(int id);
     @Modifying
-    @Query(value = "UPDATE advertisement SET title = :title, description = :description WHERE id = :id", nativeQuery = true)
-    void update(@Param("id") int id, @Param("title") String title, @Param("description") String description);
-
+    <_Advertisement extends Advertisement> _Advertisement save(_Advertisement advertisement);
     @Modifying
     void deleteById(int id);
 }
