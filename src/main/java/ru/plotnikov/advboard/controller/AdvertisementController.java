@@ -3,8 +3,7 @@ package ru.plotnikov.advboard.controller;
 import java.sql.Timestamp;
 import java.util.List;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -33,15 +32,12 @@ public class AdvertisementController {
                                                       @RequestParam(value = "end_timestamp", required = false) Timestamp endDate,
                                                       @RequestParam(value = "sort", required = false) String sortParameterJson) {
 
-        ObjectMapper objectMapper = new ObjectMapper();
         List<SortParameters> sortParameters = null;
 
-        if (sortParameterJson != null && !sortParameterJson.isEmpty()) {
-            try {
-                sortParameters = objectMapper.readValue(sortParameterJson, new TypeReference<List<SortParameters>>() {});
-            } catch (Exception e) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-            }
+        try {
+            sortParameters = SortParameters.fromString(sortParameterJson);
+        } catch (JsonProcessingException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(advService.getAll(titleTag, descriptionTag, startDate, endDate, sortParameters));
@@ -63,15 +59,12 @@ public class AdvertisementController {
             pageSize = 10;
         }
 
-        ObjectMapper objectMapper = new ObjectMapper();
         List<SortParameters> sortParameters = null;
 
-        if (sortParameterJson != null && !sortParameterJson.isEmpty()) {
-            try {
-                sortParameters = objectMapper.readValue(sortParameterJson, new TypeReference<List<SortParameters>>() {});
-            } catch (Exception e) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-            }
+        try {
+            sortParameters = SortParameters.fromString(sortParameterJson);
+        } catch (JsonProcessingException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(advService.getAllWithPaging(

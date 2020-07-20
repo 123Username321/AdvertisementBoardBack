@@ -8,11 +8,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.plotnikov.advboard.model.Advertisement;
 import ru.plotnikov.advboard.model.AdvertisementRequest;
+import ru.plotnikov.advboard.model.Category;
 import ru.plotnikov.advboard.model.SortParameters;
 import ru.plotnikov.advboard.repository.AdvertisementRepository;
 import ru.plotnikov.advboard.service.AdvertisementService;
 
 import java.sql.Timestamp;
+import java.time.Clock;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -20,34 +23,10 @@ public class AdvertisementServiceImpl implements AdvertisementService {
     private final AdvertisementRepository advRepo;
     private final String[] validColumns = {"title", "description", "add_date"};
 
-    private Sort getSortQuery(List<SortParameters> sortParameters) {
-
-        List<Sort.Order> orders = new ArrayList<>();
-        Set<String> columns = new HashSet<String>(Arrays.asList(this.validColumns));
-
-        if (sortParameters != null) {
-            for (SortParameters sortParameter : sortParameters) {
-                if (columns.contains(sortParameter.getColumnName())) {
-                    if (sortParameter.isDesc()) {
-                        orders.add(new Sort.Order(Sort.Direction.DESC, sortParameter.getColumnName()));
-                    }
-                    else {
-                        orders.add(new Sort.Order(Sort.Direction.ASC, sortParameter.getColumnName()));
-                    }
-                }
-            }
-        }
-
-        orders.add(new Sort.Order(Sort.Direction.ASC, "id"));
-
-        return Sort.by(orders);
-    }
-
     @Autowired
     public AdvertisementServiceImpl(AdvertisementRepository advRepo) {
         this.advRepo = advRepo;
     }
-
 
     @Override
     public List<Advertisement> getAll(String titleTag, String descriptionTag,
@@ -89,18 +68,53 @@ public class AdvertisementServiceImpl implements AdvertisementService {
     @Override
     @Transactional
     public int insert(AdvertisementRequest advReq) {
-        return advRepo.save(new Advertisement(advReq.getTitle(), advReq.getDescription())).getId();
+        Advertisement newAdv = new Advertisement();
+
+        newAdv.setId(0);
+        newAdv.setCategory(new Category(advReq.getCategoryId(), null));
+        newAdv.setTitle(advReq.getTitle());
+        newAdv.setDescription(advReq.getDescription());
+        newAdv.setAddDateTime(Timestamp.valueOf(LocalDateTime.now(Clock.systemDefaultZone())));
+
+        return advRepo.save(newAdv).getId();
     }
 
     @Override
     @Transactional
     public void update(int id, AdvertisementRequest advReq) {
-        advRepo.update(id, advReq.getTitle(), advReq.getDescription());
+        Advertisement tmpAdv = advRepo.getOne(id);
+        tmpAdv.setTitle(advReq.getTitle());
+        tmpAdv.setDescription(advReq.getDescription());
+        advRepo.save(tmpAdv);
     }
 
     @Override
     @Transactional
     public void deleteById(int id) {
         advRepo.deleteById(id);
+    }
+
+
+    private Sort getSortQuery(List<SortParameters> sortParameters) {
+
+        List<Sort.Order> orders = new ArrayList<>();
+        Set<String> columns = new HashSet<String>(Arrays.asList(this.validColumns));
+
+        if (sortParameters != null) {
+            for (SortParameters sortParameter : sortParameters) {
+                if (columns.contains(sortParameter.getColumnName())) {
+                    if (sortParameter.isDesc()) {
+                        orders.add(new Sort.Order(Sort.Direction.DESC, sortParameter.getColumnName()));
+                    }
+                    else {
+                        orders.add(new Sort.Order(Sort.Direction.ASC, sortParameter.getColumnName()));
+                    }
+                }
+            }
+        }
+
+        orders.add(new Sort.Order(Sort.Direction.ASC, "id"));
+
+        return Sort.by(orders);
     }
 }
