@@ -12,7 +12,7 @@ CREATE TABLE category (
 );
 
 INSERT INTO category VALUES (DEFAULT, 'Недвижимость');
-INSERT INTO category VALUES (DEFAULT, 'Персональный транспорт');
+INSERT INTO category VALUES (DEFAULT, 'Личный транспорт');
 INSERT INTO category VALUES (DEFAULT, 'Бытовая техника');
 INSERT INTO category VALUES (DEFAULT, 'Персональная электроника');
 INSERT INTO category VALUES (DEFAULT, 'Одежда и обувь');

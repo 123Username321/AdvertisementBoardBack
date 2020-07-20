@@ -22,6 +22,9 @@ public class Advertisement {
     @Column(name = "add_date")
     private Timestamp addDateTime;
 
+    @Column(name="category_id", insertable=false, updatable=false)
+    private int categoryId;
+
     //===Methods===
 
     public Advertisement() { }
@@ -78,6 +81,14 @@ public class Advertisement {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public int getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
     }
 
     public String toString() {
