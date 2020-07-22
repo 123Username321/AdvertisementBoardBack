@@ -13,12 +13,6 @@ import java.sql.Timestamp;
 import java.util.List;
 
 public interface AdvertisementRepository extends JpaRepository<Advertisement, Integer> {
-//    @Query("SELECT a FROM Advertisement a" +
-//        " WHERE (:titleTag IS NULL OR a.title LIKE :titleTag) AND" +
-//        " (:descriptionTag IS NULL OR a.description LIKE :descriptionTag) AND" +
-//        " (:categoryTag IS NULL OR a.category_id = :categoryTag) AND" +
-//        " (:startTimestamp IS NULL OR a.addDateTime >= :startTimestamp) AND" +
-//        " (:endTimestamp IS NULL OR a.addDateTime <= :endTimestamp)")
     @Query("SELECT a FROM Advertisement a JOIN a.category c" +
         " WHERE (:titleTag IS NULL OR a.title LIKE :titleTag) AND" +
         " (:descriptionTag IS NULL OR a.description LIKE :descriptionTag) AND" +
@@ -31,13 +25,7 @@ public interface AdvertisementRepository extends JpaRepository<Advertisement, In
                                 @Param("startTimestamp") Timestamp startTimestamp,
                                 @Param("endTimestamp") Timestamp endTimestamp, Sort sort);
 
-
-//    @Query("SELECT a FROM Advertisement a" +
-//            " WHERE (:titleTag IS NULL OR a.title LIKE :titleTag) AND" +
-//            " (:descriptionTag IS NULL OR a.description LIKE :descriptionTag) AND" +
-//            " (:categoryTag IS NULL OR a.category_id = :categoryTag) AND" +
-//            " (:startTimestamp IS NULL OR a.addDateTime >= :startTimestamp) AND" +
-//            " (:endTimestamp IS NULL OR a.addDateTime <= :endTimestamp)")
+    
     @Query("SELECT a FROM Advertisement a JOIN a.category c" +
             " WHERE (:titleTag IS NULL OR a.title LIKE :titleTag) AND" +
             " (:descriptionTag IS NULL OR a.description LIKE :descriptionTag) AND" +
