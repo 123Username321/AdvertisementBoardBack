@@ -25,7 +25,7 @@ public interface AdvertisementRepository extends JpaRepository<Advertisement, In
                                 @Param("startTimestamp") Timestamp startTimestamp,
                                 @Param("endTimestamp") Timestamp endTimestamp, Sort sort);
 
-    
+
     @Query("SELECT a FROM Advertisement a JOIN a.category c" +
             " WHERE (:titleTag IS NULL OR a.title LIKE :titleTag) AND" +
             " (:descriptionTag IS NULL OR a.description LIKE :descriptionTag) AND" +

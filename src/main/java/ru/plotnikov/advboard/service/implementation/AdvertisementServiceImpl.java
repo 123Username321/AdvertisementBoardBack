@@ -21,7 +21,7 @@ import java.util.*;
 @Service
 public class AdvertisementServiceImpl implements AdvertisementService {
     private final AdvertisementRepository advRepo;
-    private final String[] validColumns = {"title", "description", "add_date"};
+    private final String[] validColumns = {"title", "description", "addDateTime", "c.name"};
 
     @Autowired
     public AdvertisementServiceImpl(AdvertisementRepository advRepo) {
@@ -39,6 +39,8 @@ public class AdvertisementServiceImpl implements AdvertisementService {
         if (descriptionTag != null) {
             descriptionTag = "%" + descriptionTag + "%";
         }
+
+        Sort a = getSortQuery(sortParameters);
 
         return advRepo.findAll(titleTag, descriptionTag, categoryTag, startTimestamp, endTimestamp,
                 getSortQuery(sortParameters));
@@ -114,6 +116,8 @@ public class AdvertisementServiceImpl implements AdvertisementService {
             }
         }
 
+        //orders.add(new Sort.Order(Sort.Direction.ASC, "addDateTime"));
+        //orders.add(new Sort.Order(Sort.Direction.ASC, "c.name"));
         orders.add(new Sort.Order(Sort.Direction.ASC, "id"));
 
         return Sort.by(orders);
