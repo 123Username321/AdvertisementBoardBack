@@ -26,6 +26,7 @@ public class AdvertisementController {
     }
 
     @GetMapping("/list")
+    @CrossOrigin("*")
     public ResponseEntity<List<Advertisement>> getAll(@RequestParam(value = "title", required = false) String titleTag,
                                                       @RequestParam(value = "description", required = false) String descriptionTag,
                                                       @RequestParam(value = "category", required = false) Integer categoryTag,
@@ -42,11 +43,11 @@ public class AdvertisementController {
         }
 
         return ResponseEntity.status(HttpStatus.OK)
-                .header("Access-Control-Allow-Origin", "*")
                 .body(advService.getAll(titleTag, descriptionTag, categoryTag, startDate, endDate, sortParameters));
     }
 
     @GetMapping(value = "/list", params = {"page_number", "page_size"})
+    @CrossOrigin("*")
     public ResponseEntity<Page<Advertisement>> getWithPaging(@RequestParam("page_number") int pageNumber,
                                                              @RequestParam("page_size") int pageSize,
                                                              @RequestParam(value = "title", required = false) String titleTag,
@@ -71,30 +72,36 @@ public class AdvertisementController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
 
-        return ResponseEntity.status(HttpStatus.OK).header("Access-Control-Allow-Origin", "*").body(advService.getAllWithPaging(
-                pageNumber, pageSize, titleTag, descriptionTag, categoryTag, startDate, endDate, sortParameters));
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(advService.getAllWithPaging(pageNumber, pageSize, titleTag,
+                        descriptionTag, categoryTag, startDate, endDate, sortParameters));
     }
 
     @GetMapping("/{id}")
+    @CrossOrigin("*")
     public ResponseEntity<Advertisement> getById(@PathVariable int id) {
-        return ResponseEntity.status(HttpStatus.OK)
-                .header("Access-Control-Allow-Origin", "*")
+        return ResponseEntity
+                .status(HttpStatus.OK)
                 .body(advService.getById(id));
     }
 
     @PostMapping("/add")
+    @CrossOrigin("*")
     public ResponseEntity<Integer> insert(@RequestBody AdvertisementRequest advertisementRequest) {
-        return ResponseEntity.status(HttpStatus.OK)
-                .header("Access-Control-Allow-Origin", "*")
+        return ResponseEntity
+                .status(HttpStatus.OK)
                 .body(advService.insert(advertisementRequest));
     }
 
     @PutMapping("/{id}")
+    @CrossOrigin("*")
     void modifyById(@PathVariable int id, @RequestBody AdvertisementRequest advertisementRequest) {
         advService.update(id, advertisementRequest);
     }
 
     @DeleteMapping("/{id}")
+    @CrossOrigin("*")
     void deleteById(@PathVariable int id) {
         advService.deleteById(id);
     }

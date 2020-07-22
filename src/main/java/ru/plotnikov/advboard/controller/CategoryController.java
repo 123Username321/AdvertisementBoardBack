@@ -23,6 +23,7 @@ public class CategoryController {
     }
 
     @GetMapping("/list")
+    @CrossOrigin("*")
     public ResponseEntity<List<Category>> getAll(@RequestParam(value = "id", required = false) Integer id,
                                                  @RequestParam(value = "sort", required = false) String sortParameterJson) {
 
@@ -36,11 +37,11 @@ public class CategoryController {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .header("Access-Control-Allow-Origin", "*")
                 .body(catService.getAll(id, sortParameters));
     }
 
     @GetMapping(value = "/list", params = {"page_number", "page_size"})
+    @CrossOrigin("*")
     public ResponseEntity<List<Category>> getAllWithPaging(@RequestParam("page_number") int pageNumber,
                                                  @RequestParam("page_size") int pageSize,
                                                  @RequestParam(value = "id", required = false) Integer id,
@@ -63,27 +64,30 @@ public class CategoryController {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .header("Access-Control-Allow-Origin", "*")
                 .body(catService.getAllWithPaging(pageNumber, pageSize, id, sortParameters));
     }
 
     @GetMapping("/{id}")
+    @CrossOrigin("*")
     public ResponseEntity<Category> getById(@PathVariable int id) {
         return ResponseEntity.status(HttpStatus.OK).body(catService.getById(id));
     }
 
     @PostMapping("/add")
+    @CrossOrigin("*")
     public ResponseEntity<String> insert(@RequestBody String name) {
         return ResponseEntity.status(HttpStatus.OK).body("Success insert, id: " + catService.insert(name));
     }
 
     @PutMapping("/{id}")
+    @CrossOrigin("*")
     public ResponseEntity<String> updateById(@PathVariable int id, @RequestBody String name) {
         catService.update(id, name);
         return ResponseEntity.status(HttpStatus.OK).body("Success update");
     }
 
     @DeleteMapping("/{id}")
+    @CrossOrigin("*")
     public ResponseEntity<String> deleteById(@PathVariable int id) {
         catService.deleteById(id);
 
