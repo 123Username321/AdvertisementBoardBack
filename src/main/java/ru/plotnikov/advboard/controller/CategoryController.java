@@ -34,7 +34,10 @@ public class CategoryController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body(catService.getAll(id, sortParameters));
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .header("Access-Control-Allow-Origin", "*")
+                .body(catService.getAll(id, sortParameters));
     }
 
     @GetMapping(value = "/list", params = {"page_number", "page_size"})
@@ -58,7 +61,10 @@ public class CategoryController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body(catService.getAllWithPaging(pageNumber, pageSize, id, sortParameters));
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .header("Access-Control-Allow-Origin", "*")
+                .body(catService.getAllWithPaging(pageNumber, pageSize, id, sortParameters));
     }
 
     @GetMapping("/{id}")
