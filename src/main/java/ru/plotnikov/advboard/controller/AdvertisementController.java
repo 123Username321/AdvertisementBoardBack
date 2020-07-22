@@ -28,6 +28,7 @@ public class AdvertisementController {
     @GetMapping("/list")
     public ResponseEntity<List<Advertisement>> getAll(@RequestParam(value = "title", required = false) String titleTag,
                                                       @RequestParam(value = "description", required = false) String descriptionTag,
+                                                      @RequestParam(value = "category_id", required = false) Integer categoryTag,
                                                       @RequestParam(value = "start_timestamp", required = false) Timestamp startDate,
                                                       @RequestParam(value = "end_timestamp", required = false) Timestamp endDate,
                                                       @RequestParam(value = "sort", required = false) String sortParameterJson) {
@@ -40,7 +41,9 @@ public class AdvertisementController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body(advService.getAll(titleTag, descriptionTag, startDate, endDate, sortParameters));
+        return ResponseEntity.status(HttpStatus.OK)
+                .header("Access-Control-Allow-Origin", "*")
+                .body(advService.getAll(titleTag, descriptionTag, categoryTag, startDate, endDate, sortParameters));
     }
 
     @GetMapping(value = "/list", params = {"page_number", "page_size"})
@@ -48,6 +51,7 @@ public class AdvertisementController {
                                                              @RequestParam("page_size") int pageSize,
                                                              @RequestParam(value = "title", required = false) String titleTag,
                                                              @RequestParam(value = "description", required = false) String descriptionTag,
+                                                             @RequestParam(value = "category_id", required = false) Integer categoryTag,
                                                              @RequestParam(value = "start_timestamp", required = false) Timestamp startDate,
                                                              @RequestParam(value = "end_timestamp", required = false) Timestamp endDate,
                                                              @RequestParam(value = "sort", required = false) String sortParameterJson) {
@@ -67,13 +71,15 @@ public class AdvertisementController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body(advService.getAllWithPaging(
-                pageNumber, pageSize, titleTag, descriptionTag, startDate, endDate, sortParameters));
+        return ResponseEntity.status(HttpStatus.OK).header("Access-Control-Allow-Origin", "*").body(advService.getAllWithPaging(
+                pageNumber, pageSize, titleTag, descriptionTag, categoryTag, startDate, endDate, sortParameters));
     }
 
     @GetMapping("/{id}")
-    public Advertisement getById(@PathVariable int id) {
-        return advService.getById(id);
+    public ResponseEntity<Advertisement> getById(@PathVariable int id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .header("Access-Control-Allow-Origin", "*")
+                .body(advService.getById(id));
     }
 
     @PostMapping("/add")

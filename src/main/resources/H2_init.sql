@@ -11,6 +11,12 @@ CREATE TABLE category (
     name VARCHAR(30) NOT NULL
 );
 
+CREATE TABLE user (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(20) UNIQUE,
+    password VARCHAR(32)
+);
+
 INSERT INTO category VALUES (DEFAULT, 'Недвижимость');
 INSERT INTO category VALUES (DEFAULT, 'Личный транспорт');
 INSERT INTO category VALUES (DEFAULT, 'Бытовая техника');

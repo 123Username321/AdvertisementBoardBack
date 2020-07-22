@@ -9,10 +9,12 @@ import java.sql.Timestamp;
 import java.util.List;
 
 public interface AdvertisementService {
-    List<Advertisement> getAll(String titleTag, String descriptionTag, Timestamp startTimestamp, Timestamp endTimestamp,
+    List<Advertisement> getAll(String titleTag, String descriptionTag, Integer categoryTag,
+                               Timestamp startTimestamp, Timestamp endTimestamp,
                                List<SortParameters> sortParameters);
 
-    Page<Advertisement> getAllWithPaging(int pageNumber, int pageSize, String titleTag, String descriptionTag,
+    Page<Advertisement> getAllWithPaging(int pageNumber, int pageSize, String titleTag,
+                                         String descriptionTag, Integer categoryTag,
                                          Timestamp startTimestamp, Timestamp endTimestamp,
                                          List<SortParameters> sortParameters);
 
