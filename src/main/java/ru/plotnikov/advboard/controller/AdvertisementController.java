@@ -34,17 +34,12 @@ public class AdvertisementController {
                                                       @RequestParam(value = "sort", required = false) String sortParameterJson) {
 
         List<SortParameters> sortParameters = null;
-        System.out.println("Raw");
-        System.out.println(sortParameterJson);
 
         try {
             sortParameters = SortParameters.fromString(sortParameterJson);
         } catch (JsonProcessingException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
-
-        //System.out.println("Parsed");
-        //System.out.println(sortParameters.toString());
 
         return ResponseEntity.status(HttpStatus.OK)
                 .header("Access-Control-Allow-Origin", "*")

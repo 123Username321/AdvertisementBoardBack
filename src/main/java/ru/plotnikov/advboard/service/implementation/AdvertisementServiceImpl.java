@@ -40,8 +40,6 @@ public class AdvertisementServiceImpl implements AdvertisementService {
             descriptionTag = "%" + descriptionTag + "%";
         }
 
-        Sort a = getSortQuery(sortParameters);
-
         return advRepo.findAll(titleTag, descriptionTag, categoryTag, startTimestamp, endTimestamp,
                 getSortQuery(sortParameters));
     }
@@ -116,8 +114,6 @@ public class AdvertisementServiceImpl implements AdvertisementService {
             }
         }
 
-        //orders.add(new Sort.Order(Sort.Direction.ASC, "addDateTime"));
-        //orders.add(new Sort.Order(Sort.Direction.ASC, "c.name"));
         orders.add(new Sort.Order(Sort.Direction.ASC, "id"));
 
         return Sort.by(orders);
