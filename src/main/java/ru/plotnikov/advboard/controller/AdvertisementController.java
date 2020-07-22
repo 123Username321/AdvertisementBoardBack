@@ -17,6 +17,7 @@ import ru.plotnikov.advboard.service.AdvertisementService;
 
 @RestController
 @RequestMapping("/advertisement")
+@CrossOrigin("*")
 public class AdvertisementController {
     private final AdvertisementService advService;
 
@@ -26,7 +27,6 @@ public class AdvertisementController {
     }
 
     @GetMapping("/list")
-    @CrossOrigin("*")
     public ResponseEntity<List<Advertisement>> getAll(@RequestParam(value = "title", required = false) String titleTag,
                                                       @RequestParam(value = "description", required = false) String descriptionTag,
                                                       @RequestParam(value = "category", required = false) Integer categoryTag,
@@ -47,7 +47,6 @@ public class AdvertisementController {
     }
 
     @GetMapping(value = "/list", params = {"page_number", "page_size"})
-    @CrossOrigin("*")
     public ResponseEntity<Page<Advertisement>> getWithPaging(@RequestParam("page_number") int pageNumber,
                                                              @RequestParam("page_size") int pageSize,
                                                              @RequestParam(value = "title", required = false) String titleTag,
@@ -79,7 +78,6 @@ public class AdvertisementController {
     }
 
     @GetMapping("/{id}")
-    @CrossOrigin("*")
     public ResponseEntity<Advertisement> getById(@PathVariable int id) {
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -87,7 +85,6 @@ public class AdvertisementController {
     }
 
     @PostMapping("/add")
-    @CrossOrigin("*")
     public ResponseEntity<Integer> insert(@RequestBody AdvertisementRequest advertisementRequest) {
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -95,13 +92,11 @@ public class AdvertisementController {
     }
 
     @PutMapping("/{id}")
-    @CrossOrigin("*")
     void modifyById(@PathVariable int id, @RequestBody AdvertisementRequest advertisementRequest) {
         advService.update(id, advertisementRequest);
     }
 
     @DeleteMapping("/{id}")
-    @CrossOrigin("*")
     void deleteById(@PathVariable int id) {
         advService.deleteById(id);
     }
