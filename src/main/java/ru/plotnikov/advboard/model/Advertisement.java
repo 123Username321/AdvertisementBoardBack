@@ -1,5 +1,6 @@
 package ru.plotnikov.advboard.model;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -13,7 +14,7 @@ public class Advertisement {
     private int id;
 
     @ManyToOne
-    @JoinColumn(name="category_id", referencedColumnName = "id")
+    @JoinColumn(name = "category_id", referencedColumnName = "id")
     @JsonIgnore
     private Category category;
     private String title;
@@ -22,12 +23,10 @@ public class Advertisement {
     @Column(name = "add_date")
     private Timestamp addDateTime;
 
-    @Column(name="category_id", insertable=false, updatable=false)
-    private int categoryId;
-
     //===Methods===
 
-    public Advertisement() { }
+    public Advertisement() {
+    }
 
     public Advertisement(String title, String description) {
         this.id = 0;
@@ -83,12 +82,14 @@ public class Advertisement {
         this.category = category;
     }
 
+    @JsonGetter("categoryId")
     public int getCategoryId() {
-        return categoryId;
+        return category.getId();
     }
 
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
+    @JsonGetter("categoryName")
+    public String getCategoryName() {
+        return category.getName();
     }
 
     public String toString() {

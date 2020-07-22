@@ -17,6 +17,7 @@ import ru.plotnikov.advboard.service.AdvertisementService;
 
 @RestController
 @RequestMapping("/advertisement")
+@CrossOrigin("*")
 public class AdvertisementController {
     private final AdvertisementService advService;
 
@@ -42,7 +43,6 @@ public class AdvertisementController {
         }
 
         return ResponseEntity.status(HttpStatus.OK)
-                .header("Access-Control-Allow-Origin", "*")
                 .body(advService.getAll(titleTag, descriptionTag, categoryTag, startDate, endDate, sortParameters));
     }
 
@@ -71,21 +71,23 @@ public class AdvertisementController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
 
-        return ResponseEntity.status(HttpStatus.OK).header("Access-Control-Allow-Origin", "*").body(advService.getAllWithPaging(
-                pageNumber, pageSize, titleTag, descriptionTag, categoryTag, startDate, endDate, sortParameters));
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(advService.getAllWithPaging(pageNumber, pageSize, titleTag,
+                        descriptionTag, categoryTag, startDate, endDate, sortParameters));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Advertisement> getById(@PathVariable int id) {
-        return ResponseEntity.status(HttpStatus.OK)
-                .header("Access-Control-Allow-Origin", "*")
+        return ResponseEntity
+                .status(HttpStatus.OK)
                 .body(advService.getById(id));
     }
 
     @PostMapping("/add")
     public ResponseEntity<Integer> insert(@RequestBody AdvertisementRequest advertisementRequest) {
-        return ResponseEntity.status(HttpStatus.OK)
-                .header("Access-Control-Allow-Origin", "*")
+        return ResponseEntity
+                .status(HttpStatus.OK)
                 .body(advService.insert(advertisementRequest));
     }
 
