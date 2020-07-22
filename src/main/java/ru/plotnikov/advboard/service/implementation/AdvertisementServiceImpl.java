@@ -21,7 +21,7 @@ import java.util.*;
 @Service
 public class AdvertisementServiceImpl implements AdvertisementService {
     private final AdvertisementRepository advRepo;
-    private final String[] validColumns = {"title", "description", "add_date"};
+    private final String[] validColumns = {"title", "description", "addDateTime", "c.name"};
 
     @Autowired
     public AdvertisementServiceImpl(AdvertisementRepository advRepo) {
