@@ -29,7 +29,7 @@ public class AdvertisementServiceImpl implements AdvertisementService {
     }
 
     @Override
-    public List<Advertisement> getAll(String titleTag, String descriptionTag,
+    public List<Advertisement> getAll(String titleTag, String descriptionTag, Integer categoryTag,
                                       Timestamp startTimestamp, Timestamp endTimestamp,
                                       List<SortParameters> sortParameters) {
 
@@ -40,12 +40,13 @@ public class AdvertisementServiceImpl implements AdvertisementService {
             descriptionTag = "%" + descriptionTag + "%";
         }
 
-        return advRepo.findAll(titleTag, descriptionTag, startTimestamp, endTimestamp,
+        return advRepo.findAll(titleTag, descriptionTag, categoryTag, startTimestamp, endTimestamp,
                 getSortQuery(sortParameters));
     }
 
     @Override
-    public Page<Advertisement> getAllWithPaging(int pageNumber, int pageSize, String titleTag, String descriptionTag,
+    public Page<Advertisement> getAllWithPaging(int pageNumber, int pageSize, String titleTag,
+                                                String descriptionTag, Integer categoryTag,
                                                 Timestamp startTimestamp, Timestamp endTimestamp,
                                                 List<SortParameters> sortParameters) {
 
@@ -56,7 +57,7 @@ public class AdvertisementServiceImpl implements AdvertisementService {
             descriptionTag = "%" + descriptionTag + "%";
         }
 
-        return advRepo.findAllWithPaging(titleTag, descriptionTag, startTimestamp, endTimestamp,
+        return advRepo.findAllWithPaging(titleTag, descriptionTag, categoryTag, startTimestamp, endTimestamp,
                 PageRequest.of(pageNumber - 1, pageSize, getSortQuery(sortParameters)));
     }
 
